@@ -13,10 +13,7 @@ class ProductPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => FavProductsCubit(getIt())),
-        BlocProvider(create: (context) => InternetConnectionCubit()),
-      ],
+      providers: [BlocProvider.value(value: getIt<FavProductsCubit>())],
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,

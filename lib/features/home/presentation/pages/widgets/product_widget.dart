@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 import 'package:test_project/features/fav_products/presentation/cubit/fav_products_cubit/fav_products_cubit.dart';
 import 'package:test_project/features/home/data/models/product_model.dart';
 import 'package:test_project/features/product/presentation/pages/product_page.dart';
@@ -8,7 +7,6 @@ import 'package:test_project/features/product/presentation/pages/product_page.da
 class ProductWidget extends StatelessWidget {
   ProductWidget({super.key, required this.product});
   ProductModel product;
-  final favBox = Hive.box("favBox");
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +40,18 @@ class ProductWidget extends StatelessWidget {
               children: [
                 Stack(
                   children: [
+                    ClipRRect(
+                      borderRadius: BorderRadiusGeometry.vertical(
+                        top: Radius.circular(10),
+                      ),
+                      child: SizedBox(
+                        height: 130,
+                        child: Image.network(
+                          width: double.infinity,
+                          product.images![0],
+                        ),
+                      ),
+                    ),
                     Positioned(
                       right: 0,
                       child: IconButton(
@@ -59,18 +69,6 @@ class ProductWidget extends StatelessWidget {
                         },
                         icon: Icon(
                           isFav ? Icons.favorite : Icons.favorite_outline,
-                        ),
-                      ),
-                    ),
-                    ClipRRect(
-                      borderRadius: BorderRadiusGeometry.vertical(
-                        top: Radius.circular(10),
-                      ),
-                      child: SizedBox(
-                        height: 130,
-                        child: Image.network(
-                          width: double.infinity,
-                          product.images![0],
                         ),
                       ),
                     ),

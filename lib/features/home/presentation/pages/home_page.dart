@@ -13,9 +13,9 @@ class HomePage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ProductsCubit(getIt())..getProducts(),
+          create: (context) => getIt<ProductsCubit>()..getProducts(),
         ),
-        BlocProvider(create: (context) => FavProductsCubit(getIt())),
+        BlocProvider.value(value: getIt<FavProductsCubit>()),
       ],
       child: Scaffold(
         appBar: AppBar(title: Text("products")),

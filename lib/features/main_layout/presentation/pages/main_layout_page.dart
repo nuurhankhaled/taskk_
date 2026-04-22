@@ -15,37 +15,37 @@ class MainLayoutPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => MainLayoutCubit(),
       child: BlocBuilder<MainLayoutCubit, MainLayoutState>(
-        builder: (context, state) {
+        builder: (context, mainLayoutState) {
+          final currentIndex = mainLayoutState is AppBottomNavState
+              ? mainLayoutState.currentIndex
+              : 0;
+
           return Scaffold(
             body: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
-              builder: (context, state) {
-                return state is InternetNotConnectedState
-                    ? Text("No internet")
-                    : (mainLayoutIntitalScreenIndex == 0)
-                    ? HomePage()
-                    : FavProdcuctsPage();
+              builder: (context, internetState) {
+                if (internetState is InternetNotConnectedState) {
+                  return const Center(child: Text("No internet"));
+                }
+                return currentIndex == 0 ? HomePage() : FavProdcuctsPage();
               },
             ),
             bottomNavigationBar: BottomNavigationBar(
-              onTap: (value) => {
-                context.read<MainLayoutCubit>().changeBottomNavBarIndex(value),
+              currentIndex: currentIndex,
+              onTap: (value) {
+                context.read<MainLayoutCubit>().changeBottomNavBarIndex(value);
               },
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.home,
-                    color: mainLayoutIntitalScreenIndex == 0
-                        ? Colors.purple
-                        : Colors.grey,
+                    color: currentIndex == 0 ? Colors.purple : Colors.grey,
                   ),
                   label: "",
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.favorite,
-                    color: mainLayoutIntitalScreenIndex == 1
-                        ? Colors.purple
-                        : Colors.grey,
+                    color: currentIndex == 1 ? Colors.purple : Colors.grey,
                   ),
                   label: "",
                 ),

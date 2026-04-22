@@ -5,12 +5,12 @@ import 'package:test_project/features/home/data/remote/products_api_services.dar
 class ProductsRepo {
   final ProductsApiService _productsApiService;
   ProductsRepo(this._productsApiService);
-  Future<ApiResult<List<ProductModel>>> getHomeData() async {
+  Future<AppResult<List<ProductModel>>> getHomeData() async {
     try {
       final response = await _productsApiService.getProducts();
-      return ApiResult.success(response);
+      return AppResult.success(response);
     } catch (e) {
-      return ApiResult.failure(e.toString());
+      return AppResult.failure(e.toString());
     }
   }
 }

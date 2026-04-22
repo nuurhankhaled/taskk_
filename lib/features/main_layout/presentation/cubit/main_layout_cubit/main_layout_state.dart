@@ -1,19 +1,10 @@
 part of 'main_layout_cubit.dart';
 
-abstract class MainLayoutState extends Equatable {
-  const MainLayoutState();
-
-  @override
-  List<Object> get props => [];
-}
+sealed class MainLayoutState {}
 
 class MainLayoutInitial extends MainLayoutState {}
 
 class AppBottomNavState extends MainLayoutState {
   final int currentIndex;
-
-  const AppBottomNavState(this.currentIndex);
-
-  @override
-  List<Object> get props => [currentIndex];
+  AppBottomNavState({this.currentIndex = 0});
 }

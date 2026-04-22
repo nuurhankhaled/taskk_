@@ -1,25 +1,34 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart'; // ✅ add this import
 
 class DioFactory {
-  /// private constructor as I don't want to allow creating an instance of this class
   DioFactory._();
-
   static Dio? dio;
 
   static Dio getDio() {
     Duration timeOut = const Duration(seconds: 80);
-
     if (dio == null) {
       dio = Dio();
       dio!
         ..options.connectTimeout = timeOut
         ..options.receiveTimeout = timeOut;
       addDioHeaders();
-      // addDioInterceptor();
+      _ignoreSSL(); // ✅ add this
       return dio!;
     } else {
       return dio!;
     }
+  }
+
+  // ✅ add this method
+  static void _ignoreSSL() {
+    (dio!.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+      final client = HttpClient();
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
   }
 
   static void addDioHeaders() async {

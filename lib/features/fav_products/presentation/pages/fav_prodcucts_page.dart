@@ -9,8 +9,8 @@ class FavProdcuctsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => FavProductsCubit(getIt())..getAllFavourites(),
+    return BlocProvider.value(
+      value: getIt<FavProductsCubit>()..getAllFavourites(),
       child: Scaffold(
         appBar: AppBar(title: Text("Favourites")),
         body: Padding(

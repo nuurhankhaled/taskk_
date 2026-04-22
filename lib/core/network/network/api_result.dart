@@ -1,7 +1,7 @@
-abstract class ApiResult<T> {
-  const ApiResult();
-  factory ApiResult.success(T data) => Success(data);
-  factory ApiResult.failure(String error) => Failure(error);
+abstract class AppResult<T> {
+  const AppResult();
+  factory AppResult.success(T data) => Success(data);
+  factory AppResult.failure(String error) => Failure(error);
   R when<R>({
     required R Function(T data) success,
     required R Function(String error) failure,
@@ -11,7 +11,7 @@ abstract class ApiResult<T> {
     } else if (this is Failure<T>) {
       return failure((this as Failure<T>).error);
     }
-    throw Exception('Unknown ApiResult type');
+    throw Exception('Unknown AppResult type');
   }
 
   R? whenOrNull<R>({
@@ -27,7 +27,7 @@ abstract class ApiResult<T> {
   }
 }
 
-class Success<T> extends ApiResult<T> {
+class Success<T> extends AppResult<T> {
   final T data;
 
   const Success(this.data);
@@ -36,7 +36,7 @@ class Success<T> extends ApiResult<T> {
   String toString() => 'Success(data: $data)';
 }
 
-class Failure<T> extends ApiResult<T> {
+class Failure<T> extends AppResult<T> {
   final String error;
 
   const Failure(this.error);
