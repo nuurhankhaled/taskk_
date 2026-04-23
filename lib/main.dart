@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/bloc_observer.dart';
 import 'package:test_project/core/di/dependency_injection.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
-import 'package:test_project/features/main_layout/presentation/pages/main_layout_page.dart';
+import 'package:test_project/core/routing/app_router.dart';
+import 'package:test_project/core/routing/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -18,13 +19,14 @@ void main() async {
     BlocProvider(
       create: (context) =>
           getIt<InternetConnectionCubit>()..checkConnectivity(),
-      child: MyApp(),
+      child: MyApp(appRouter: AppRouter()),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.appRouter});
+  final AppRouter appRouter;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MainLayoutPage(),
+      onGenerateRoute: appRouter.generateRoute,
+      initialRoute: Routes.loginScreen,
     );
   }
 }

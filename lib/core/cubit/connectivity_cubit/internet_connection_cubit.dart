@@ -27,7 +27,7 @@ class InternetConnectionCubit extends Cubit<InternetConnectionState> {
 
   // MARK: - Close the subscription when the bloc is closed.
   @override
-  Future<void> closeSubscription() {
+  Future<void> close() {
     subscription?.cancel();
     return super.close();
   }

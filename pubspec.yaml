@@ -50,7 +50,7 @@ dependencies:
   cloud_firestore: ^6.3.0
   retrofit: ^4.9.2
   firebase_remote_config: ^6.4.0
-
+ 
 dev_dependencies:
 
   flutter_test:

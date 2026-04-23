@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_project/features/fav_products/presentation/pages/fav_prodcucts_page.dart';
+import 'package:test_project/core/routing/app_router.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_state.dart';
-import 'package:test_project/features/home/presentation/pages/home_page.dart';
 import 'package:test_project/features/main_layout/presentation/cubit/main_layout_cubit/main_layout_cubit.dart';
 
 class MainLayoutPage extends StatelessWidget {
@@ -25,7 +24,7 @@ class MainLayoutPage extends StatelessWidget {
                 if (internetState is InternetNotConnectedState) {
                   return const Center(child: Text("No internet"));
                 }
-                return currentIndex == 0 ? HomePage() : FavProdcuctsPage();
+                return AppRouter().screens[currentIndex];
               },
             ),
             bottomNavigationBar: BottomNavigationBar(
