@@ -16,7 +16,6 @@ class RemoteConfigService {
     });
 
     await _remoteConfig.fetchAndActivate();
-    print('✅ Base URL from Remote Config: ${baseUrl}');
   }
 
   String get baseUrl => _remoteConfig.getString('base_url');
