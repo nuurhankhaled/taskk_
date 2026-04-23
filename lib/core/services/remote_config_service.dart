@@ -12,7 +12,7 @@ class RemoteConfigService {
     );
 
     await _remoteConfig.setDefaults({
-      'base_url': 'https://your-default-url.com', // fallback if fetch fails
+      'base_url': baseUrl, // fallback if fetch fails
     });
 
     await _remoteConfig.fetchAndActivate();
