@@ -44,7 +44,12 @@ dependencies:
   hive: ^2.2.3
   connectivity_plus: ^7.1.1
   get_it: ^9.2.1
+  firebase_core: ^4.7.0
+  firebase_auth: ^6.4.0
+  firebase_messaging: ^16.2.0
+  cloud_firestore: ^6.3.0
   retrofit: ^4.9.2
+  firebase_remote_config: ^6.4.0
 
 dev_dependencies:
 

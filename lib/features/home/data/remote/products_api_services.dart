@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:test_project/core/constant.dart';
 import 'package:test_project/features/home/data/models/product_model.dart';
 
 class ProductsApiService {
@@ -10,7 +9,7 @@ class ProductsApiService {
 
   Future<List<ProductModel>> getProducts() async {
     try {
-      final response = await _dio.get('$baseUrl$productsApi');
+      final response = await _dio.get(productsApi);
 
       // If response is a list
       if (response.data is List) {

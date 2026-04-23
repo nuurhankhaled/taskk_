@@ -28,7 +28,7 @@ class ProductModel {
     price = json['price'];
     description = json['description'];
     category = json['category'] != null
-        ? new Category.fromJson(json['category'])
+        ? Category.fromJson(json['category'])
         : null;
     images = json['images'].cast<String>();
     creationAt = json['creationAt'];
@@ -36,18 +36,18 @@ class ProductModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['slug'] = this.slug;
-    data['price'] = this.price;
-    data['description'] = this.description;
-    if (this.category != null) {
-      data['category'] = this.category!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['slug'] = slug;
+    data['price'] = price;
+    data['description'] = description;
+    if (category != null) {
+      data['category'] = category!.toJson();
     }
-    data['images'] = this.images;
-    data['creationAt'] = this.creationAt;
-    data['updatedAt'] = this.updatedAt;
+    data['images'] = images;
+    data['creationAt'] = creationAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }
@@ -79,13 +79,13 @@ class Category {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['slug'] = this.slug;
-    data['image'] = this.image;
-    data['creationAt'] = this.creationAt;
-    data['updatedAt'] = this.updatedAt;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['slug'] = slug;
+    data['image'] = image;
+    data['creationAt'] = creationAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

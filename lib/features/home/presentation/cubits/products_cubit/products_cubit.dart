@@ -33,7 +33,6 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:test_project/features/home/data/models/product_model.dart';
 import 'package:test_project/features/home/data/repo/products_repo.dart';
 

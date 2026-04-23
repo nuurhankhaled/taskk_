@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/di/dependency_injection.dart';
 import 'package:test_project/features/fav_products/presentation/cubit/fav_products_cubit/fav_products_cubit.dart';
 import 'package:test_project/features/home/data/models/product_model.dart';
-import 'package:test_project/features/home/presentation/cubits/connectivity_cubit/internet_connection_cubit.dart';
-import 'package:test_project/features/home/presentation/cubits/connectivity_cubit/internet_connection_state.dart';
+import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
+import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_state.dart';
 
 class ProductPage extends StatelessWidget {
   ProductPage({super.key, required this.product});
@@ -50,15 +50,17 @@ class ProductPage extends StatelessWidget {
                             spacing: 15,
                             children: [
                               Row(
+                                spacing: 10,
                                 children: [
-                                  Text(
-                                    product.title!,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Text(
+                                      product.title!,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                  Spacer(),
                                   BlocBuilder<
                                     FavProductsCubit,
                                     FavProductsState

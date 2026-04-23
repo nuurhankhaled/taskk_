@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_project/core/constant.dart';
 import 'package:test_project/features/fav_products/presentation/pages/fav_prodcucts_page.dart';
-import 'package:test_project/features/home/presentation/cubits/connectivity_cubit/internet_connection_cubit.dart';
-import 'package:test_project/features/home/presentation/cubits/connectivity_cubit/internet_connection_state.dart';
+import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
+import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_state.dart';
 import 'package:test_project/features/home/presentation/pages/home_page.dart';
 import 'package:test_project/features/main_layout/presentation/cubit/main_layout_cubit/main_layout_cubit.dart';
 

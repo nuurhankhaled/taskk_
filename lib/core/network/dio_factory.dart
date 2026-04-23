@@ -5,23 +5,22 @@ import 'package:dio/io.dart'; // ✅ add this import
 class DioFactory {
   DioFactory._();
   static Dio? dio;
-
-  static Dio getDio() {
+  static Dio getDio(String baseUrl) {
     Duration timeOut = const Duration(seconds: 80);
     if (dio == null) {
       dio = Dio();
       dio!
+        ..options.baseUrl = baseUrl
         ..options.connectTimeout = timeOut
         ..options.receiveTimeout = timeOut;
       addDioHeaders();
-      _ignoreSSL(); // ✅ add this
+      _ignoreSSL();
       return dio!;
     } else {
       return dio!;
     }
-  }
+  } // ✅ add this method
 
-  // ✅ add this method
   static void _ignoreSSL() {
     (dio!.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
       final client = HttpClient();
