@@ -47,8 +47,15 @@ class ProductWidget extends StatelessWidget {
                       child: SizedBox(
                         height: 130,
                         child: Image.network(
-                          width: double.infinity,
                           product.images![0],
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => Center(
+                            child: Icon(
+                              Icons.broken_image,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -62,13 +69,13 @@ class ProductWidget extends StatelessWidget {
                             );
                           } else {
                             await context.read<FavProductsCubit>().writeData(
-                              product.id!,
-                              product.title,
+                              product,
                             );
                           }
                         },
                         icon: Icon(
                           isFav ? Icons.favorite : Icons.favorite_outline,
+                          color: isFav ? Colors.red : Colors.black,
                         ),
                       ),
                     ),

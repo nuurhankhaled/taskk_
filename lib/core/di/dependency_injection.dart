@@ -14,6 +14,7 @@ import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_c
 import 'package:test_project/features/home/presentation/cubits/products_cubit/products_cubit.dart';
 import 'package:test_project/features/auth/data/repo/auth_repo.dart';
 import 'package:test_project/features/auth/presentation/cubit/auth_cubit/auth_cubit.dart';
+import 'package:test_project/features/main_layout/presentation/cubit/main_layout_cubit/main_layout_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -30,6 +31,8 @@ Future<void> setupGetIt() async {
   // Dio & Api services
   Dio dio = DioFactory.getDio(remoteConfigService.baseUrl);
 
+  getIt.registerLazySingleton<MainLayoutCubit>(() => MainLayoutCubit());
+
   getIt.registerLazySingleton<ProductsApiService>(
     () => ProductsApiService(dio),
   );
@@ -42,12 +45,13 @@ Future<void> setupGetIt() async {
     () => FavProductsLocalDataSource(Hive.box("favBox")),
   );
   getIt.registerLazySingleton<FavProductsCubit>(
-    () => FavProductsCubit(getIt(), getIt()),
+    () => FavProductsCubit(getIt()),
   );
 
   getIt.registerLazySingleton<InternetConnectionCubit>(
     () => InternetConnectionCubit(),
   );
+  getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
   getIt.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSource(getIt()),

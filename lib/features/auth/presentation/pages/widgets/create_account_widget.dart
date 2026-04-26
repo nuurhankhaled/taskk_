@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:test_project/core/helpers/extensions.dart';
+import 'package:test_project/core/routing/routes.dart';
 import 'package:test_project/core/theming/text_styles.dart';
 
-class CreateAccountWidget extends StatelessWidget {
-  const CreateAccountWidget({super.key});
+enum AccountState { login, signup }
 
+class AccountStateWidget extends StatelessWidget {
+  const AccountStateWidget({super.key, required this.accountState});
+  final AccountState accountState;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Don't have an account?",
+          accountState == AccountState.login
+              ? "Don't have an account?"
+              : "Already have an account?",
           style: TextStyles.textStyle14.copyWith(fontSize: 12),
         ),
         TextButton(
           onPressed: () {
-            // context.pushNamed(Routes.signupScreen);
+            context.pushReplacementNamed(
+              (accountState == AccountState.login)
+                  ? Routes.signupScreen
+                  : Routes.loginScreen,
+            );
           },
           child: Text(
-            'Create Account',
+            accountState == AccountState.login ? 'Create Account' : 'Login',
             style: TextStyles.textStyle12.copyWith(
               color: Colors.deepPurpleAccent,
               fontWeight: FontWeight.w600,

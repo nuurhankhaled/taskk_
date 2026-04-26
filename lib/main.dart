@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:test_project/core/bloc_observer.dart';
 import 'package:test_project/core/di/dependency_injection.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       onGenerateRoute: appRouter.generateRoute,
       initialRoute: Routes.loginScreen,
+      builder: EasyLoading.init(),
     );
   }
 }

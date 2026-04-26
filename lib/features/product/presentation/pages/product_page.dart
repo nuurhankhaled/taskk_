@@ -33,11 +33,20 @@ class ProductPage extends StatelessWidget {
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.network(
-                          product.images![0],
+                        SizedBox(
                           height: 450,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
+                          child: Image.network(
+                            product.images![0],
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                          ),
                         ),
 
                         Padding(
@@ -81,16 +90,16 @@ class ProductPage extends StatelessWidget {
                                           } else {
                                             await context
                                                 .read<FavProductsCubit>()
-                                                .writeData(
-                                                  product.id!,
-                                                  product.title,
-                                                );
+                                                .writeData(product);
                                           }
                                         },
                                         icon: Icon(
                                           isFav
                                               ? Icons.favorite
                                               : Icons.favorite_outline,
+                                          color: isFav
+                                              ? Colors.red
+                                              : Colors.black,
                                         ),
                                       );
                                     },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_project/core/di/dependency_injection.dart';
 import 'package:test_project/core/routing/app_router.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_state.dart';
@@ -11,7 +12,7 @@ class MainLayoutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MainLayoutCubit(),
+      create: (context) => getIt<MainLayoutCubit>(),
       child: BlocBuilder<MainLayoutCubit, MainLayoutState>(
         builder: (context, mainLayoutState) {
           final currentIndex = mainLayoutState is AppBottomNavState
@@ -19,6 +20,9 @@ class MainLayoutPage extends StatelessWidget {
               : 0;
 
           return Scaffold(
+            appBar: AppBar(
+              title: Text(currentIndex == 0 ? "Products" : "Favourites"),
+            ),
             body: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
               builder: (context, internetState) {
                 if (internetState is InternetNotConnectedState) {

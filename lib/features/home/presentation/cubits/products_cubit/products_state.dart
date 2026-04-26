@@ -9,3 +9,5 @@ class ProductsLoading extends ProductsState {}
 class ProductsSuccess extends ProductsState {}
 
 class ProductsFailed extends ProductsState {}
+
+class PaginationLoading extends ProductsState {}

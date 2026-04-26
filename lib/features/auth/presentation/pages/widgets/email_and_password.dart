@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_project/core/helpers/app_regex.dart';
 import 'package:test_project/core/widgets/custom_text_form_field.dart';
-import 'package:test_project/features/auth/presentation/pages/widgets/forget_password.dart';
+import 'package:test_project/features/auth/presentation/cubit/auth_cubit/auth_cubit.dart';
 
 class EmailAndPasswordWidget extends StatefulWidget {
   const EmailAndPasswordWidget({super.key});
@@ -34,13 +35,13 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // final loginCubit = context.read<LoginCubit>();
+    final authCubit = context.read<AuthCubit>();
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: AutofillGroup(
         child: Form(
-          // key: loginCubit.formkey,
+          key: authCubit.formkey,
           child: Column(
             spacing: 2,
             children: [
@@ -49,14 +50,14 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
                 // borderColor: AppColors.lightBlueFillColor,
                 // backgroundColor: AppColors.lightBlueFillColor,
                 autofillHints: const [AutofillHints.username], // or email
-                // controller: loginCubit.emailController,
+                controller: authCubit.emailController,
                 keyboardType: TextInputType.emailAddress,
-                // validator: (value) {
-                //   if (value!.isEmpty || !AppRegex.isEmailValid(value)) {
-                //     return "signin.emailIsRequiredToLogin".tr();
-                //   }
-                //   return null;
-                // },
+                validator: (value) {
+                  if (value!.isEmpty || !AppRegex.isEmailValid(value)) {
+                    return "email Is Required To Login";
+                  }
+                  return null;
+                },
                 labelText: "Email",
               ),
               CustomTextFormField(
@@ -65,7 +66,7 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
                 // backgroundColor: AppColors.lightBlueFillColor,
                 foucseNode: _focusNode,
                 autofillHints: const [AutofillHints.password],
-                // controller: loginCubit.passwordController,
+                controller: authCubit.passwordController,
                 labelText: "password",
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: isObsecure,
@@ -86,13 +87,12 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
                     icon: Icon(
                       isObsecure ? Icons.visibility_off : Icons.visibility,
                     ),
-                    // color: (_isFocused)
-                    //     ? AppColors.primaryColor
-                    //     : Colors.grey.shade500,
+                    color: (_isFocused)
+                        ? Colors.deepPurple
+                        : Colors.grey.shade500,
                   ),
                 ),
               ),
-              ForgetPassWidget(),
             ],
           ),
         ),
