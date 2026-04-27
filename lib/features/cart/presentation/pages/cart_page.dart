@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/helpers/extensions.dart';
-import 'package:test_project/core/helpers/extensions.dart';
-import 'package:test_project/core/routing/routes.dart';
+import 'package:test_project/core/utility/custom_snack_bar.dart';
+import 'package:test_project/features/cart/presentation/cubits/cart_cubit/cart_cubit.dart';
+import 'package:test_project/features/cart/presentation/pages/widgets/cart_product_widget.dart';
+import 'package:test_project/features/cart/presentation/pages/widgets/checkout_widget.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -11,114 +14,67 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () {
-            context.pop();
-          },
-        ),
+        leading: IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: () => context.pop()),
       ),
-      bottomNavigationBar: InkWell(
-        onTap: () {
-          Navigator.pushNamed(context, Routes.checkoutPage);
+      bottomNavigationBar: CheckoutWidget(),
+      body: BlocConsumer<CartCubit, CartState>(
+        listener: (context, state) {
+          if (state is CartItemRemoved) {
+            context.showErrorSnackBar('Item removed from cart');
+          } else if (state is CartItemUpdated) {
+            context.showInfoSnackBar('Quantity updated');
+          } else if (state is CartCleared) {
+            context.showErrorSnackBar('Cart cleared');
+          }
         },
-        child: Container(
-          margin: EdgeInsetsGeometry.all(20),
-          width: double.infinity,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.deepPurple,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Center(
-            child: Text(
-              "Checkout",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+        builder: (context, state) {
+          final cartCubit = context.read<CartCubit>();
+
+          if (state is CartLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (cartCubit.cartItems.isEmpty) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text('Your cart is empty', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                ],
+              ),
+            );
+          }
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                      onPressed: () => cartCubit.clearCart(),
+                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                      label: const Text('Clear Cart', style: TextStyle(color: Colors.red)),
+                    ),
+                  ),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: cartCubit.cartItems.length,
+                    separatorBuilder: (_, __) => 12.0.height(),
+                    itemBuilder: (context, index) {
+                      final item = cartCubit.cartItems[index];
+                      return CartProductWidget(item: item, cartCubit: cartCubit);
+                    },
+                  ),
+                ],
               ),
             ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      spreadRadius: -2,
-                      blurRadius: 5,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadiusGeometry.vertical(
-                        top: Radius.circular(10),
-                      ),
-                      child: SizedBox(
-                        height: 130,
-                        child: Image.network(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2JFyVMUGB2hCmAhFXOdCydqzgsCHd2BAzEA&s',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Center(
-                            child: Icon(
-                              Icons.broken_image,
-                              size: 50,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    20.0.width(),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops',
-                            maxLines: 2,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          15.0.height(),
-                          Row(
-                            children: [
-                              Text('Price: \$109.95'),
-                              Spacer(),
-                              Row(
-                                spacing: 5,
-                                children: [
-                                  Icon(Icons.remove_circle_outline),
-                                  Text('1'),
-                                  Icon(Icons.add_circle_outline),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+          );
+        },
       ),
     );
   }

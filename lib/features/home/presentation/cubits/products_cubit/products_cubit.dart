@@ -11,11 +11,9 @@ class ProductsCubit extends Cubit<ProductsState> {
   final ProductsRepo _productsRepo;
   final InternetConnectionCubit _internetCubit;
 
-  ProductsCubit(this._productsRepo, this._internetCubit)
-    : super(ProductsInitial());
+  ProductsCubit(this._productsRepo, this._internetCubit) : super(ProductsInitial());
 
-  static ProductsCubit get(BuildContext context) =>
-      BlocProvider.of<ProductsCubit>(context);
+  static ProductsCubit get(BuildContext context) => BlocProvider.of<ProductsCubit>(context);
 
   List<ProductModel> _allProducts = [];
   List<ProductModel> products = [];
@@ -28,7 +26,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   StreamSubscription? _connectivitySubscription;
 
   void init() {
-    _listenToConnectivity(); // ✅ listen for connection changes
+    _listenToConnectivity();
     loadProducts();
     scrollController.addListener(_onScroll);
   }
@@ -36,7 +34,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   void _listenToConnectivity() {
     _connectivitySubscription = _internetCubit.stream.listen((state) {
       if (state is InternetConnectedState && !_isSyncing) {
-        _syncFromApi(); // ✅ sync when connection restored
+        _syncFromApi();
       }
     });
   }
@@ -44,9 +42,9 @@ class ProductsCubit extends Cubit<ProductsState> {
   Future<void> loadProducts() async {
     emit(ProductsLoading());
     if (_internetCubit.state is InternetConnectedState) {
-      await _loadFromApi(); // ✅ online → fetch from API
+      await _loadFromApi();
     } else {
-      await _loadFromCache(); // ✅ offline → load from Hive
+      await _loadFromCache();
     }
   }
 
@@ -92,7 +90,7 @@ class ProductsCubit extends Cubit<ProductsState> {
         products = [];
         hasMore = true;
         _loadNextPage();
-        emit(ProductsSuccess(isSynced: true)); // ✅ notify UI sync happened
+        emit(ProductsSuccess(isSynced: true));
       },
       failure: (_) {},
     );
@@ -115,18 +113,14 @@ class ProductsCubit extends Cubit<ProductsState> {
       hasMore = false;
       return;
     }
-    final nextItems = _allProducts.sublist(
-      start,
-      end > _allProducts.length ? _allProducts.length : end,
-    );
+    final nextItems = _allProducts.sublist(start, end > _allProducts.length ? _allProducts.length : end);
     products.addAll(nextItems);
     _currentPage++;
     hasMore = end < _allProducts.length;
   }
 
   void _onScroll() {
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 200) {
+    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
       loadMore();
     }
   }

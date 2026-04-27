@@ -7,4 +7,5 @@ class Routes {
   static const String editProfilePage = '/editProfile_screen';
   static const String cartPage = '/cart_screen';
   static const String checkoutPage = '/checkout_screen';
+  static const String productPage = '/product_screen';
 }

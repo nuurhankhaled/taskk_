@@ -5,6 +5,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:test_project/core/network/dio_factory.dart';
 import 'package:test_project/core/services/remote_config_service.dart';
 import 'package:test_project/features/auth/data/remote/auth_data_source.dart';
+import 'package:test_project/features/cart/data/local/cart_local_data_source.dart';
+import 'package:test_project/features/cart/data/repo/cart_repo.dart';
+import 'package:test_project/features/cart/presentation/cubits/cart_cubit/cart_cubit.dart';
 import 'package:test_project/features/fav_products/data/local_data_source/fav_products_local_source.dart';
 import 'package:test_project/features/fav_products/data/repo/fav_products_repo.dart';
 import 'package:test_project/features/fav_products/presentation/cubit/fav_products_cubit/fav_products_cubit.dart';
@@ -28,44 +31,37 @@ Future<void> setupGetIt() async {
   // Hive setup
   await Hive.initFlutter();
   await Hive.openBox("favBox");
-  await Hive.box("favBox").clear();
   await Hive.openBox("productsBox");
+  await Hive.openBox("cartBox");
+
+  // Dio
   Dio dio = DioFactory.getDio(remoteConfigService.baseUrl);
 
+  // Main Layout
   getIt.registerLazySingleton<MainLayoutCubit>(() => MainLayoutCubit());
 
-  getIt.registerLazySingleton<ProductsApiService>(
-    () => ProductsApiService(dio),
-  );
-
-  getIt.registerLazySingleton<ProductsLocalDataSource>(
-    () => ProductsLocalDataSource(Hive.box("productsBox")),
-  );
-
-  getIt.registerLazySingleton<ProductsRepo>(
-    () => ProductsRepo(getIt(), getIt()),
-  );
-
+  // Products
+  getIt.registerLazySingleton<ProductsApiService>(() => ProductsApiService(dio));
+  getIt.registerLazySingleton<ProductsLocalDataSource>(() => ProductsLocalDataSource(Hive.box("productsBox")));
+  getIt.registerLazySingleton<ProductsRepo>(() => ProductsRepo(getIt(), getIt()));
   getIt.registerFactory<ProductsCubit>(() => ProductsCubit(getIt(), getIt()));
 
+  // Fav
+  getIt.registerLazySingleton<FavProductsLocalDataSource>(() => FavProductsLocalDataSource(Hive.box("favBox")));
   getIt.registerLazySingleton<FavProductsRepo>(() => FavProductsRepo(getIt()));
-  getIt.registerLazySingleton<FavProductsLocalDataSource>(
-    () => FavProductsLocalDataSource(Hive.box("favBox")),
-  );
-  getIt.registerLazySingleton<FavProductsCubit>(
-    () => FavProductsCubit(getIt()),
-  );
+  getIt.registerLazySingleton<FavProductsCubit>(() => FavProductsCubit(getIt()));
 
-  getIt.registerLazySingleton<InternetConnectionCubit>(
-    () => InternetConnectionCubit(),
-  );
+  // Internet
+  getIt.registerLazySingleton<InternetConnectionCubit>(() => InternetConnectionCubit());
+
+  // Firebase Auth
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-
-  getIt.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSource(getIt()),
-  );
-
+  getIt.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSource(getIt()));
   getIt.registerLazySingleton<AuthRepo>(() => AuthRepo(getIt()));
-
   getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt()));
+
+  // Cart
+  getIt.registerLazySingleton<CartLocalDataSource>(() => CartLocalDataSource(Hive.box("cartBox")));
+  getIt.registerLazySingleton<CartRepo>(() => CartRepo(getIt()));
+  getIt.registerLazySingleton<CartCubit>(() => CartCubit(getIt()));
 }
