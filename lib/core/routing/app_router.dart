@@ -5,6 +5,8 @@ import 'package:test_project/core/routing/routes.dart';
 import 'package:test_project/features/auth/presentation/cubit/auth_cubit/auth_cubit.dart';
 import 'package:test_project/features/auth/presentation/pages/login_page.dart';
 import 'package:test_project/features/auth/presentation/pages/signup_page.dart';
+import 'package:test_project/features/cart/presentation/pages/cart_page.dart';
+import 'package:test_project/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:test_project/features/fav_products/presentation/cubit/fav_products_cubit/fav_products_cubit.dart';
 import 'package:test_project/features/fav_products/presentation/pages/fav_prodcucts_page.dart';
 import 'package:test_project/features/home/presentation/cubits/products_cubit/products_cubit.dart';
@@ -15,35 +17,31 @@ import 'package:test_project/features/main_layout/presentation/pages/main_layout
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.loginScreen:
+      case Routes.loginPage:
         return CupertinoPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<AuthCubit>(),
             child: LoginPage(),
           ),
         );
-      case Routes.signupScreen:
+      case Routes.signupPage:
         return CupertinoPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<AuthCubit>(),
             child: SignupPage(),
           ),
         );
-      case Routes.mainlayoutScreen:
+      case Routes.mainlayoutPage:
         return CupertinoPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<MainLayoutCubit>(),
             child: MainLayoutPage(),
           ),
         );
-
-      //     case Routes.signupScreen:
-      //       return CupertinoPageRoute(
-      //         builder: (_) => BlocProvider(
-      //           create: (context) => SignupCubit(getIt()),
-      //           child: SignUpScreen(),
-      //         ),
-      //       );
+      case Routes.cartPage:
+        return CupertinoPageRoute(builder: (_) => CartPage());
+      case Routes.checkoutPage:
+        return CupertinoPageRoute(builder: (_) => CheckoutPage());
 
       default:
         return null;

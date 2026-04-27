@@ -8,6 +8,7 @@ import 'package:test_project/features/auth/data/remote/auth_data_source.dart';
 import 'package:test_project/features/fav_products/data/local_data_source/fav_products_local_source.dart';
 import 'package:test_project/features/fav_products/data/repo/fav_products_repo.dart';
 import 'package:test_project/features/fav_products/presentation/cubit/fav_products_cubit/fav_products_cubit.dart';
+import 'package:test_project/features/home/data/local/products_local_data_source.dart';
 import 'package:test_project/features/home/data/remote/products_api_services.dart';
 import 'package:test_project/features/home/data/repo/products_repo.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
@@ -27,8 +28,8 @@ Future<void> setupGetIt() async {
   // Hive setup
   await Hive.initFlutter();
   await Hive.openBox("favBox");
-
-  // Dio & Api services
+  await Hive.box("favBox").clear();
+  await Hive.openBox("productsBox");
   Dio dio = DioFactory.getDio(remoteConfigService.baseUrl);
 
   getIt.registerLazySingleton<MainLayoutCubit>(() => MainLayoutCubit());
@@ -37,9 +38,16 @@ Future<void> setupGetIt() async {
     () => ProductsApiService(dio),
   );
 
-  getIt.registerLazySingleton<ProductsRepo>(() => ProductsRepo(getIt()));
+  getIt.registerLazySingleton<ProductsLocalDataSource>(
+    () => ProductsLocalDataSource(Hive.box("productsBox")),
+  );
 
-  getIt.registerFactory<ProductsCubit>(() => ProductsCubit(getIt()));
+  getIt.registerLazySingleton<ProductsRepo>(
+    () => ProductsRepo(getIt(), getIt()),
+  );
+
+  getIt.registerFactory<ProductsCubit>(() => ProductsCubit(getIt(), getIt()));
+
   getIt.registerLazySingleton<FavProductsRepo>(() => FavProductsRepo(getIt()));
   getIt.registerLazySingleton<FavProductsLocalDataSource>(
     () => FavProductsLocalDataSource(Hive.box("favBox")),

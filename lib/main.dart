@@ -15,7 +15,9 @@ void main() async {
   Bloc.observer = MyBlocObserver();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   await setupGetIt();
+
   runApp(
     BlocProvider(
       create: (context) =>
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       onGenerateRoute: appRouter.generateRoute,
-      initialRoute: Routes.loginScreen,
+      initialRoute: Routes.mainlayoutPage,
       builder: EasyLoading.init(),
     );
   }

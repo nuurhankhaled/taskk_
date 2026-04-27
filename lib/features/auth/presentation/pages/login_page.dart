@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
             EasyLoading.dismiss();
             customToast(msg: "login Success!", color: Colors.green);
             context.pushNamedAndRemoveUntil(
-              Routes.mainlayoutScreen,
+              Routes.mainlayoutPage,
               (route) => false,
               predicate: (Route<dynamic> route) {
                 return false;

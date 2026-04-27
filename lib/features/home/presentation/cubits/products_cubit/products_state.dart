@@ -6,7 +6,10 @@ class ProductsInitial extends ProductsState {}
 
 class ProductsLoading extends ProductsState {}
 
-class ProductsSuccess extends ProductsState {}
+class ProductsSuccess extends ProductsState {
+  final bool isSynced;
+  ProductsSuccess({this.isSynced = false});
+}
 
 class ProductsFailed extends ProductsState {}
 

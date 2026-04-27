@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/di/dependency_injection.dart';
+import 'package:test_project/core/helpers/extensions.dart';
 import 'package:test_project/core/routing/app_router.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_cubit.dart';
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_state.dart';
+import 'package:test_project/core/routing/routes.dart';
 import 'package:test_project/features/main_layout/presentation/cubit/main_layout_cubit/main_layout_cubit.dart';
 
 class MainLayoutPage extends StatelessWidget {
@@ -22,6 +24,14 @@ class MainLayoutPage extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(currentIndex == 0 ? "Products" : "Favourites"),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    context.pushNamed(Routes.cartPage);
+                  },
+                  icon: const Icon(Icons.shopping_cart_outlined),
+                ),
+              ],
             ),
             body: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
               builder: (context, internetState) {

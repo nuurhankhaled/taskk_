@@ -23,8 +23,8 @@ class AccountStateWidget extends StatelessWidget {
           onPressed: () {
             context.pushReplacementNamed(
               (accountState == AccountState.login)
-                  ? Routes.signupScreen
-                  : Routes.loginScreen,
+                  ? Routes.signupPage
+                  : Routes.loginPage,
             );
           },
           child: Text(
