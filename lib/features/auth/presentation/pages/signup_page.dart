@@ -29,22 +29,20 @@ class SignupPage extends StatelessWidget {
             EasyLoading.dismiss();
             customToast(msg: "signup Success!", color: Colors.green);
             context.pushNamedAndRemoveUntil(
-              Routes.loginPage,
+              Routes.mainlayoutPage,
               (route) => false,
-              predicate: (Route<dynamic> route) {
-                return false;
-              },
+              predicate: (Route<dynamic> route) => false,
             );
           }
         },
         builder: (context, state) {
+          final cubit = context.read<AuthCubit>();
           return SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  200.0.height(),
+                  60.0.height(),
                   Text(
                     "Create Account",
                     style: TextStyles.textStyle18.copyWith(
@@ -52,15 +50,14 @@ class SignupPage extends StatelessWidget {
                     ),
                   ),
                   50.0.height(),
-                  EmailAndPasswordWidget(),
+
+                  FormWidget(isSignup: true),
                   20.0.height(),
                   CustomButton(
                     color: Colors.deepPurple,
                     margin: EdgeInsets.symmetric(horizontal: 25),
                     text: 'signup',
-                    onPressed: () {
-                      validateThenSignup(context);
-                    },
+                    onPressed: () => validateThenSignup(context),
                     fontSize: 14,
                     borderRadius: 30,
                     height: 55,

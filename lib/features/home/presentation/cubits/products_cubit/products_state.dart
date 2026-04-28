@@ -11,6 +11,9 @@ class ProductsSuccess extends ProductsState {
   ProductsSuccess({this.isSynced = false});
 }
 
-class ProductsFailed extends ProductsState {}
+class ProductsFailed extends ProductsState {
+  final bool isNoInternet;
+  ProductsFailed({this.isNoInternet = false});
+}
 
 class PaginationLoading extends ProductsState {}

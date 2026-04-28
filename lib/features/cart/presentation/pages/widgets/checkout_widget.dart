@@ -21,16 +21,22 @@ class CheckoutWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Total:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Total:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                   Text(
                     '${cartCubit.totalPrice.toStringAsFixed(2)} EGP',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                    ),
                   ),
                 ],
               ),
-              ),
             ),
-            const SizedBox(height: 8),
+            8.0.height(),
             InkWell(
               onTap: () {
                 context.pushNamed(Routes.checkoutPage);
@@ -39,11 +45,17 @@ class CheckoutWidget extends StatelessWidget {
                 margin: const EdgeInsets.all(20),
                 width: double.infinity,
                 height: 50,
-                decoration: BoxDecoration(color: Colors.deepPurple, borderRadius: BorderRadius.circular(20)),
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple,
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 child: const Center(
                   child: Text(
                     "Checkout",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

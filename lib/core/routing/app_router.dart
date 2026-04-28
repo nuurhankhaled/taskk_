@@ -16,25 +16,43 @@ import 'package:test_project/features/home/presentation/pages/home_page.dart';
 import 'package:test_project/features/main_layout/presentation/cubit/main_layout_cubit/main_layout_cubit.dart';
 import 'package:test_project/features/main_layout/presentation/pages/main_layout_page.dart';
 import 'package:test_project/features/product/presentation/pages/product_page.dart';
+import 'package:test_project/features/profile/presentation/cubits/profile_cubit/profile_cubit.dart';
+import 'package:test_project/features/profile/presentation/pages/profile_page.dart';
+import 'package:test_project/features/search/presentation/cubit/search_cubit/search_cubit.dart';
+import 'package:test_project/features/search/presentation/pages/search_page.dart';
+import 'package:test_project/features/settings/presentation/cubit/settings_cubit/settings_cubit.dart';
+import 'package:test_project/features/settings/presentation/pages/settings_page.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.loginPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(create: (context) => getIt<AuthCubit>(), child: LoginPage()),
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<AuthCubit>(),
+            child: LoginPage(),
+          ),
         );
       case Routes.signupPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(create: (context) => getIt<AuthCubit>(), child: SignupPage()),
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<AuthCubit>(),
+            child: SignupPage(),
+          ),
         );
       case Routes.mainlayoutPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(create: (context) => getIt<MainLayoutCubit>(), child: MainLayoutPage()),
+          builder: (_) => BlocProvider(
+            create: (context) => getIt<MainLayoutCubit>(),
+            child: MainLayoutPage(),
+          ),
         );
       case Routes.cartPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider.value(value: getIt<CartCubit>()..loadCart(), child: CartPage()),
+          builder: (_) => BlocProvider.value(
+            value: getIt<CartCubit>()..loadCart(),
+            child: CartPage(),
+          ),
         );
       case Routes.productPage:
         var args = settings.arguments as ProductModel;
@@ -48,7 +66,29 @@ class AppRouter {
           ),
         );
       case Routes.checkoutPage:
-        return CupertinoPageRoute(builder: (_) => CheckoutPage());
+        return CupertinoPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: getIt<CartCubit>(),
+            child: CheckoutPage(),
+          ),
+        );
+      case Routes.profilePage:
+        return CupertinoPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: getIt<ProfileCubit>()..init(),
+            child: ProfilePage(),
+          ),
+        );
+      case Routes.searchPage:
+        return CupertinoPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<SearchCubit>()..init()),
+              BlocProvider.value(value: getIt<FavProductsCubit>()),
+            ],
+            child: const SearchPage(),
+          ),
+        );
 
       default:
         return null;
@@ -63,6 +103,10 @@ class AppRouter {
       ],
       child: HomePage(),
     ),
-    BlocProvider.value(value: getIt<FavProductsCubit>()..getAllFavourites(), child: FavProdcuctsPage()),
+    BlocProvider.value(
+      value: getIt<FavProductsCubit>()..getAllFavourites(),
+      child: FavProdcuctsPage(),
+    ),
+    BlocProvider.value(value: getIt<SettingsCubit>(), child: SettingsPage()),
   ];
 }

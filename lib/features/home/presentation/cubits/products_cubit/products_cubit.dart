@@ -5,25 +5,32 @@ import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_c
 import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_state.dart';
 import 'package:test_project/features/home/data/models/product_model.dart';
 import 'package:test_project/features/home/data/repo/products_repo.dart';
+
 part 'products_state.dart';
 
 class ProductsCubit extends Cubit<ProductsState> {
   final ProductsRepo _productsRepo;
   final InternetConnectionCubit _internetCubit;
 
-  ProductsCubit(this._productsRepo, this._internetCubit) : super(ProductsInitial());
+  ProductsCubit(this._productsRepo, this._internetCubit)
+    : super(ProductsInitial());
 
-  static ProductsCubit get(BuildContext context) => BlocProvider.of<ProductsCubit>(context);
+  static ProductsCubit get(BuildContext context) =>
+      BlocProvider.of<ProductsCubit>(context);
 
   List<ProductModel> _allProducts = [];
   List<ProductModel> products = [];
+
   final int _pageSize = 10;
   int _currentPage = 0;
+
   bool hasMore = true;
   bool _isSyncing = false;
 
   final ScrollController scrollController = ScrollController();
+
   StreamSubscription? _connectivitySubscription;
+  StreamSubscription? _waitConnectionSubscription;
 
   void init() {
     _listenToConnectivity();
@@ -41,39 +48,44 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   Future<void> loadProducts() async {
     emit(ProductsLoading());
-    if (_internetCubit.state is InternetConnectedState) {
+
+    final currentState = _internetCubit.state;
+
+    if (currentState is InternetConnectedState) {
       await _loadFromApi();
-    } else {
-      await _loadFromCache();
+      return;
     }
+
+    if (currentState is InternetNotConnectedState) {
+      emit(ProductsFailed(isNoInternet: true));
+      return;
+    }
+
+    _waitConnectionSubscription?.cancel();
+
+    _waitConnectionSubscription = _internetCubit.stream.listen((state) async {
+      if (state is InternetConnectedState) {
+        await _loadFromApi();
+        await _waitConnectionSubscription?.cancel();
+      } else if (state is InternetNotConnectedState) {
+        emit(ProductsFailed(isNoInternet: true));
+        await _waitConnectionSubscription?.cancel();
+      }
+    });
   }
 
   Future<void> _loadFromApi() async {
     final response = await _productsRepo.getHomeData();
-    response.when(
-      success: (data) {
-        _allProducts = data;
-        _currentPage = 0;
-        products = [];
-        hasMore = true;
-        _loadNextPage();
-        emit(ProductsSuccess());
-      },
-      failure: (_) async {
-        await _loadFromCache(); // ✅ API fails → fallback to cache
-      },
-    );
-  }
 
-  Future<void> _loadFromCache() async {
-    final response = await _productsRepo.getCachedProducts();
     response.when(
       success: (data) {
         _allProducts = data;
         _currentPage = 0;
         products = [];
         hasMore = true;
+
         _loadNextPage();
+
         emit(ProductsSuccess());
       },
       failure: (_) => emit(ProductsFailed()),
@@ -82,45 +94,60 @@ class ProductsCubit extends Cubit<ProductsState> {
 
   Future<void> _syncFromApi() async {
     _isSyncing = true;
+
     final response = await _productsRepo.getHomeData();
+
     response.when(
       success: (data) {
         _allProducts = data;
         _currentPage = 0;
         products = [];
         hasMore = true;
+
         _loadNextPage();
+
         emit(ProductsSuccess(isSynced: true));
       },
       failure: (_) {},
     );
+
     _isSyncing = false;
   }
 
   void loadMore() {
-    if (!hasMore) return;
+    if (!hasMore || state is PaginationLoading) return;
+
     emit(PaginationLoading());
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _loadNextPage();
-      emit(ProductsSuccess());
-    });
+
+    _loadNextPage();
+
+    emit(ProductsSuccess());
   }
 
   void _loadNextPage() {
     final start = _currentPage * _pageSize;
     final end = start + _pageSize;
+
     if (start >= _allProducts.length) {
       hasMore = false;
       return;
     }
-    final nextItems = _allProducts.sublist(start, end > _allProducts.length ? _allProducts.length : end);
+
+    final nextItems = _allProducts.sublist(
+      start,
+      end > _allProducts.length ? _allProducts.length : end,
+    );
+
     products.addAll(nextItems);
+
     _currentPage++;
+
     hasMore = end < _allProducts.length;
   }
 
   void _onScroll() {
-    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
+    if (scrollController.position.pixels >=
+        scrollController.position.maxScrollExtent - 200) {
       loadMore();
     }
   }
@@ -128,6 +155,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   @override
   Future<void> close() {
     _connectivitySubscription?.cancel();
+    _waitConnectionSubscription?.cancel();
     scrollController.dispose();
     return super.close();
   }

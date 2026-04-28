@@ -52,7 +52,7 @@ class LoginPage extends StatelessWidget {
                     ),
                   ),
                   50.0.height(),
-                  EmailAndPasswordWidget(),
+                  FormWidget(),
                   20.0.height(),
                   CustomButton(
                     color: Colors.deepPurple,

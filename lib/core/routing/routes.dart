@@ -8,4 +8,6 @@ class Routes {
   static const String cartPage = '/cart_screen';
   static const String checkoutPage = '/checkout_screen';
   static const String productPage = '/product_screen';
+  static const String searchPage = '/search_screen';
+  static const String settingsPage = '/settings_screen';
 }

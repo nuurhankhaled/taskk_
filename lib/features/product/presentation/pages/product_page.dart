@@ -17,13 +17,16 @@ class ProductPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: getIt<FavProductsCubit>()),
-        BlocProvider.value(value: getIt<CartCubit>()..loadCart()), // ✅
+        BlocProvider.value(value: getIt<CartCubit>()..loadCart()),
       ],
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Product Details"),
-          leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back_ios)),
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
         ),
         body: SingleChildScrollView(
           child: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
@@ -34,15 +37,26 @@ class ProductPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: 450,
+                          height: MediaQuery.of(context).size.height * 0.45,
                           child: Image.network(
+                            width: double.infinity,
                             product.images![0],
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => const Center(child: Icon(Icons.broken_image, size: 50, color: Colors.grey)),
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Center(
+                                  child: Icon(
+                                    Icons.broken_image,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  ),
+                                ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 20,
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -50,33 +64,63 @@ class ProductPage extends StatelessWidget {
                               Row(
                                 children: [
                                   Expanded(
-                                    child: Text(product.title!, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                                    child: Text(
+                                      product.title!,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(width: 10),
-                                  BlocBuilder<FavProductsCubit, FavProductsState>(
+                                  BlocBuilder<
+                                    FavProductsCubit,
+                                    FavProductsState
+                                  >(
                                     builder: (context, state) {
-                                      final cubit = context.read<FavProductsCubit>();
-                                      final isFav = cubit.isFavorite(product.id!);
+                                      final cubit = context
+                                          .read<FavProductsCubit>();
+                                      final isFav = cubit.isFavorite(
+                                        product.id!,
+                                      );
                                       return IconButton(
                                         onPressed: () async {
                                           if (isFav) {
-                                            await context.read<FavProductsCubit>().deleteData(product.id!);
+                                            await context
+                                                .read<FavProductsCubit>()
+                                                .deleteData(product.id!);
                                           } else {
-                                            await context.read<FavProductsCubit>().writeData(product);
+                                            await context
+                                                .read<FavProductsCubit>()
+                                                .writeData(product);
                                           }
                                         },
-                                        icon: Icon(isFav ? Icons.favorite : Icons.favorite_outline, color: isFav ? Colors.red : Colors.black),
+                                        icon: Icon(
+                                          isFav
+                                              ? Icons.favorite
+                                              : Icons.favorite_outline,
+                                          color: isFav
+                                              ? Colors.red
+                                              : Colors.black,
+                                        ),
                                       );
                                     },
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 15),
-                              Text(product.description!, style: const TextStyle(fontSize: 14)),
+                              Text(
+                                product.description!,
+                                style: const TextStyle(fontSize: 14),
+                              ),
                               const SizedBox(height: 15),
                               Text(
                                 "Price: ${product.price!.toString()} EGP",
-                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.deepPurple,
+                                ),
                               ),
                             ],
                           ),

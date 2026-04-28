@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/helpers/app_regex.dart';
 import 'package:test_project/core/widgets/custom_text_form_field.dart';
 import 'package:test_project/features/auth/presentation/cubit/auth_cubit/auth_cubit.dart';
 
-class EmailAndPasswordWidget extends StatefulWidget {
-  const EmailAndPasswordWidget({super.key});
+class FormWidget extends StatefulWidget {
+  const FormWidget({super.key, this.isSignup = false});
+  final bool isSignup;
 
   @override
-  State<EmailAndPasswordWidget> createState() => _EmailAndPasswordWidgetState();
+  State<FormWidget> createState() => _FormWidgetState();
 }
 
-class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
+class _FormWidgetState extends State<FormWidget> {
   bool isObsecure = true;
   bool _isFocused = false;
   late FocusNode _focusNode;
@@ -36,25 +38,53 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
   @override
   Widget build(BuildContext context) {
     final authCubit = context.read<AuthCubit>();
-
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: AutofillGroup(
         child: Form(
           key: authCubit.formkey,
           child: Column(
             spacing: 2,
             children: [
+              if (widget.isSignup) ...[
+                CustomTextFormField(
+                  borderWidth: 0.5,
+                  controller: authCubit.firstNameController,
+                  keyboardType: TextInputType.name,
+                  labelText: 'First Name',
+                  validator: (value) =>
+                      value!.isEmpty ? 'Enter first name' : null,
+                ),
+                CustomTextFormField(
+                  borderWidth: 0.5,
+                  controller: authCubit.lastNameController,
+                  keyboardType: TextInputType.name,
+                  labelText: 'Last Name',
+                  validator: (value) =>
+                      value!.isEmpty ? 'Enter last name' : null,
+                ),
+                CustomTextFormField(
+                  borderWidth: 0.5,
+                  controller: authCubit.mobileController,
+                  keyboardType: TextInputType.phone,
+                  labelText: 'Mobile Number',
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(11),
+                  ],
+                  validator: (value) =>
+                      value!.length < 11 ? 'Enter valid mobile number' : null,
+                ),
+              ],
+
               CustomTextFormField(
                 borderWidth: 0.5,
-                // borderColor: AppColors.lightBlueFillColor,
-                // backgroundColor: AppColors.lightBlueFillColor,
-                autofillHints: const [AutofillHints.username], // or email
+                autofillHints: const [AutofillHints.username],
                 controller: authCubit.emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value!.isEmpty || !AppRegex.isEmailValid(value)) {
-                    return "email Is Required To Login";
+                    return "Email is required to login";
                   }
                   return null;
                 },
@@ -62,12 +92,10 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
               ),
               CustomTextFormField(
                 borderWidth: 0.5,
-                // borderColor: AppColors.lightBlueFillColor,
-                // backgroundColor: AppColors.lightBlueFillColor,
                 foucseNode: _focusNode,
                 autofillHints: const [AutofillHints.password],
                 controller: authCubit.passwordController,
-                labelText: "password",
+                labelText: "Password",
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: isObsecure,
                 validator: (value) {
@@ -77,7 +105,7 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
                   return null;
                 },
                 suffixIcon: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: IconButton(
                     onPressed: () {
                       setState(() {
@@ -87,7 +115,7 @@ class _EmailAndPasswordWidgetState extends State<EmailAndPasswordWidget> {
                     icon: Icon(
                       isObsecure ? Icons.visibility_off : Icons.visibility,
                     ),
-                    color: (_isFocused)
+                    color: _isFocused
                         ? Colors.deepPurple
                         : Colors.grey.shade500,
                   ),

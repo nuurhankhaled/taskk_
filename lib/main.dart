@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -7,6 +8,7 @@ import 'package:test_project/core/cubit/connectivity_cubit/internet_connection_c
 import 'package:test_project/core/routing/app_router.dart';
 import 'package:test_project/core/routing/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:test_project/features/settings/presentation/cubit/settings_cubit/settings_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,11 +20,25 @@ void main() async {
 
   await setupGetIt();
 
+  await EasyLocalization.ensureInitialized();
+
   runApp(
-    BlocProvider(
-      create: (context) =>
-          getIt<InternetConnectionCubit>()..checkConnectivity(),
-      child: MyApp(appRouter: AppRouter()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              getIt<InternetConnectionCubit>()..checkConnectivity(),
+        ),
+        BlocProvider(create: (context) => getIt<SettingsCubit>()),
+      ],
+      child: EasyLocalization(
+        saveLocale: true,
+        useFallbackTranslations: true,
+        fallbackLocale: const Locale('en', 'GB'),
+        supportedLocales: const [Locale('ar', 'EG'), Locale('en', 'GB')],
+        path: 'assets/languages',
+        child: MyApp(appRouter: AppRouter()),
+      ),
     ),
   );
 }
@@ -33,14 +49,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      onGenerateRoute: appRouter.generateRoute,
-      initialRoute: Routes.mainlayoutPage,
-      builder: EasyLoading.init(),
+    return BlocBuilder<SettingsCubit, SettingsState>(
+      builder: (context, state) {
+        final settingsCubit = context.read<SettingsCubit>();
+        return MaterialApp(
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          debugShowCheckedModeBanner: false,
+          themeMode: settingsCubit.themeMode,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.deepPurple,
+              brightness: Brightness.dark,
+            ),
+          ),
+          onGenerateRoute: appRouter.generateRoute,
+          initialRoute: Routes.signupPage,
+          builder: EasyLoading.init(),
+        );
+      },
     );
   }
 }

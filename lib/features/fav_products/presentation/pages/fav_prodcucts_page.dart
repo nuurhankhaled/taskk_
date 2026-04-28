@@ -23,13 +23,14 @@ class FavProdcuctsPage extends StatelessWidget {
                     context: context,
                     removeTop: true,
                     child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 5,
-                            childAspectRatio: 0.9,
-                          ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 5,
+                        childAspectRatio:
+                            MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height * 0.65),
+                      ),
                       itemCount: context
                           .read<FavProductsCubit>()
                           .favProducts
