@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,29 +52,23 @@ class _FormWidgetState extends State<FormWidget> {
                   borderWidth: 0.5,
                   controller: authCubit.firstNameController,
                   keyboardType: TextInputType.name,
-                  labelText: 'First Name',
-                  validator: (value) =>
-                      value!.isEmpty ? 'Enter first name' : null,
+                  labelText: 'First Name'.tr(),
+                  validator: (value) => value!.isEmpty ? 'Enter first name'.tr() : null,
                 ),
                 CustomTextFormField(
                   borderWidth: 0.5,
                   controller: authCubit.lastNameController,
                   keyboardType: TextInputType.name,
-                  labelText: 'Last Name',
-                  validator: (value) =>
-                      value!.isEmpty ? 'Enter last name' : null,
+                  labelText: 'Last Name'.tr(),
+                  validator: (value) => value!.isEmpty ? 'Enter last name'.tr() : null,
                 ),
                 CustomTextFormField(
                   borderWidth: 0.5,
                   controller: authCubit.mobileController,
                   keyboardType: TextInputType.phone,
-                  labelText: 'Mobile Number',
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(11),
-                  ],
-                  validator: (value) =>
-                      value!.length < 11 ? 'Enter valid mobile number' : null,
+                  labelText: 'Mobile Number'.tr(),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(11)],
+                  validator: (value) => value!.length < 11 ? 'Enter valid mobile number'.tr() : null,
                 ),
               ],
 
@@ -84,23 +79,23 @@ class _FormWidgetState extends State<FormWidget> {
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value!.isEmpty || !AppRegex.isEmailValid(value)) {
-                    return "Email is required to login";
+                    return "Email is required".tr();
                   }
                   return null;
                 },
-                labelText: "Email",
+                labelText: "Email".tr(),
               ),
               CustomTextFormField(
                 borderWidth: 0.5,
                 foucseNode: _focusNode,
                 autofillHints: const [AutofillHints.password],
                 controller: authCubit.passwordController,
-                labelText: "Password",
+                labelText: "Password".tr(),
                 keyboardType: TextInputType.visiblePassword,
                 obscureText: isObsecure,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Password is required to login";
+                    return "Password is required".tr();
                   }
                   return null;
                 },
@@ -112,12 +107,8 @@ class _FormWidgetState extends State<FormWidget> {
                         isObsecure = !isObsecure;
                       });
                     },
-                    icon: Icon(
-                      isObsecure ? Icons.visibility_off : Icons.visibility,
-                    ),
-                    color: _isFocused
-                        ? Colors.deepPurple
-                        : Colors.grey.shade500,
+                    icon: Icon(isObsecure ? Icons.visibility_off : Icons.visibility),
+                    color: _isFocused ? Colors.deepPurple : Colors.grey.shade500,
                   ),
                 ),
               ),

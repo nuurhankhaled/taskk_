@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:test_project/core/helpers/extensions.dart';
 import 'package:test_project/core/routing/routes.dart';
@@ -13,26 +14,14 @@ class AccountStateWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          accountState == AccountState.login
-              ? "Don't have an account?"
-              : "Already have an account?",
-          style: TextStyles.textStyle14.copyWith(fontSize: 12),
-        ),
+        Text(accountState == AccountState.login ? "Don't have an account?".tr() : "Already have an account?".tr(), style: TextStyles.textStyle14.copyWith(fontSize: 12)),
         TextButton(
           onPressed: () {
-            context.pushReplacementNamed(
-              (accountState == AccountState.login)
-                  ? Routes.signupPage
-                  : Routes.loginPage,
-            );
+            context.pushReplacementNamed((accountState == AccountState.login) ? Routes.signupPage : Routes.loginPage);
           },
           child: Text(
-            accountState == AccountState.login ? 'Create Account' : 'Login',
-            style: TextStyles.textStyle12.copyWith(
-              color: Colors.deepPurpleAccent,
-              fontWeight: FontWeight.w600,
-            ),
+            accountState == AccountState.login ? 'Create Account'.tr() : 'login'.tr(),
+            style: TextStyles.textStyle12.copyWith(color: Colors.deepPurpleAccent, fontWeight: FontWeight.w600),
           ),
         ),
       ],

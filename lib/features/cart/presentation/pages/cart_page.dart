@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/helpers/extensions.dart';
@@ -13,18 +14,18 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cart'),
+        title: Text('Cart'.tr()),
         leading: IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: () => context.pop()),
       ),
       bottomNavigationBar: CheckoutWidget(),
       body: BlocConsumer<CartCubit, CartState>(
         listener: (context, state) {
           if (state is CartItemRemoved) {
-            context.showErrorSnackBar('Item removed from cart');
+            context.showErrorSnackBar('Item removed from cart'.tr());
           } else if (state is CartItemUpdated) {
-            context.showInfoSnackBar('Quantity updated');
+            context.showInfoSnackBar('Quantity updated'.tr());
           } else if (state is CartCleared) {
-            context.showErrorSnackBar('Cart cleared');
+            if (!state.silent) context.showErrorSnackBar('Cart cleared'.tr());
           }
         },
         builder: (context, state) {
@@ -35,13 +36,13 @@ class CartPage extends StatelessWidget {
           }
 
           if (cartCubit.cartItems.isEmpty) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey),
                   SizedBox(height: 16),
-                  Text('Your cart is empty', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                  Text('Your cart is empty'.tr(), style: TextStyle(fontSize: 16, color: Colors.grey)),
                 ],
               ),
             );
@@ -55,9 +56,9 @@ class CartPage extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton.icon(
-                      onPressed: () => cartCubit.clearCart(),
+                      onPressed: () => cartCubit.clearCart(silent: false),
                       icon: const Icon(Icons.delete_outline, color: Colors.red),
-                      label: const Text('Clear Cart', style: TextStyle(color: Colors.red)),
+                      label: Text('Clear Cart'.tr(), style: TextStyle(color: Colors.red)),
                     ),
                   ),
                   ListView.separated(

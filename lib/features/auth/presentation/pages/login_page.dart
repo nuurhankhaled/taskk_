@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,11 +24,11 @@ class LoginPage extends StatelessWidget {
             EasyLoading.show();
           } else if (state is LoginFailure) {
             EasyLoading.dismiss();
-            customToast(msg: "login Failed!", color: Colors.red);
+            customToast(msg: "login Failed!".tr(), color: Colors.red);
           } else if (state is LoginSuccess) {
             TextInput.finishAutofillContext();
             EasyLoading.dismiss();
-            customToast(msg: "login Success!", color: Colors.green);
+            customToast(msg: "login Success!".tr(), color: Colors.green);
             context.pushNamedAndRemoveUntil(
               Routes.mainlayoutPage,
               (route) => false,
@@ -45,19 +46,14 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   200.0.height(),
-                  Text(
-                    "Login into your Account",
-                    style: TextStyles.textStyle18.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  Text("Login into your Account".tr(), style: TextStyles.textStyle18.copyWith(fontWeight: FontWeight.w600)),
                   50.0.height(),
                   FormWidget(),
                   20.0.height(),
                   CustomButton(
                     color: Colors.deepPurple,
                     margin: EdgeInsets.symmetric(horizontal: 25),
-                    text: 'signin',
+                    text: 'signin'.tr(),
                     onPressed: () {
                       validateThenLogin(context);
                     },

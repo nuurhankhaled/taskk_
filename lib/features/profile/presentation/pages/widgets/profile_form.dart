@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test_project/core/helpers/extensions.dart';
@@ -13,45 +14,28 @@ class ProfileForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomTextFormField(
-          controller: cubit.firstNameController,
-          labelText: 'First Name',
-          borderWidth: 0.5,
-          validator: (value) => value!.isEmpty ? 'Enter first name' : null,
-        ),
+        CustomTextFormField(controller: cubit.firstNameController, labelText: 'First Name'.tr(), borderWidth: 0.5, validator: (value) => value!.isEmpty ? 'Enter first name'.tr() : null),
         16.0.height(),
 
-        CustomTextFormField(
-          controller: cubit.lastNameController,
-          labelText: 'Last Name',
-          borderWidth: 0.5,
-          validator: (value) => value!.isEmpty ? 'Enter last name' : null,
-        ),
+        CustomTextFormField(controller: cubit.lastNameController, labelText: 'Last Name'.tr(), borderWidth: 0.5, validator: (value) => value!.isEmpty ? 'Enter last name'.tr() : null),
         16.0.height(),
 
         CustomTextFormField(
           controller: cubit.mobileController,
-          labelText: 'Mobile Number',
+          labelText: 'Mobile Number'.tr(),
           keyboardType: TextInputType.phone,
           borderWidth: 0.5,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            LengthLimitingTextInputFormatter(11),
-          ],
-          validator: (value) =>
-              value!.length < 11 ? 'Enter valid mobile number' : null,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(11)],
+          validator: (value) => value!.length < 11 ? 'Enter valid mobile number'.tr() : null,
         ),
         16.0.height(),
 
         CustomTextFormField(
-          labelText: 'Email',
+          labelText: 'Email'.tr(),
           borderWidth: 0.5,
           readOnly: true,
-          fillColor: Colors.grey.shade100,
-          controller: TextEditingController(
-            text: cubit.currentUser?.email ?? '',
-          ),
-          suffixIcon: const Icon(Icons.lock_outline, color: Colors.grey),
+          controller: TextEditingController(text: cubit.currentUser?.email ?? ''),
+          suffixIcon: Icon(Icons.lock_outline, color: Colors.grey.shade600),
         ),
       ],
     );

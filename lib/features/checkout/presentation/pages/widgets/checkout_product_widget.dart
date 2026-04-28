@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:test_project/core/helpers/extensions.dart';
 import 'package:test_project/features/cart/data/models/cart_model.dart';
@@ -36,14 +36,11 @@ class CheckoutProductWidget extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text('Quantity: ${item.quantity}'),
+              Text('${"Quantity:".tr()} ${item.quantity}'),
             ],
           ),
         ),
-        Text(
-          '${item.product.price! * item.quantity} EGP',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text('${item.product.price! * item.quantity} ${"EGP".tr()}', style: const TextStyle(fontWeight: FontWeight.bold)),
       ],
     );
   }

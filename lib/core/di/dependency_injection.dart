@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:test_project/core/fcm.dart';
 import 'package:test_project/core/network/dio_factory.dart';
 import 'package:test_project/core/services/remote_config_service.dart';
 import 'package:test_project/core/services/shared_pref_services.dart';
@@ -28,15 +29,15 @@ import 'package:test_project/features/settings/presentation/cubit/settings_cubit
 final getIt = GetIt.instance;
 
 Future<void> setupGetIt() async {
+  // Shared Preferences
+  await SharedPrefService.init();
+
   // Remote Config
   final remoteConfigService = RemoteConfigService();
   await remoteConfigService.init();
   getIt.registerLazySingleton<RemoteConfigService>(() => remoteConfigService);
 
-  // Shared Preferences
-  await SharedPrefService.init();
-
-  // Hive setup
+  // Hive
   await Hive.initFlutter();
   await Hive.openBox("favBox");
   await Hive.openBox("productsBox");
@@ -46,50 +47,35 @@ Future<void> setupGetIt() async {
   // Dio
   Dio dio = DioFactory.getDio(remoteConfigService.baseUrl);
 
+  // Settings
+  getIt.registerLazySingleton<SettingsCubit>(() => SettingsCubit());
+
   // Main Layout
   getIt.registerLazySingleton<MainLayoutCubit>(() => MainLayoutCubit());
 
+  // Internet
+  getIt.registerLazySingleton<InternetConnectionCubit>(() => InternetConnectionCubit());
+
   // Products
-  getIt.registerLazySingleton<ProductsApiService>(
-    () => ProductsApiService(dio),
-  );
-  getIt.registerLazySingleton<ProductsLocalDataSource>(
-    () => ProductsLocalDataSource(Hive.box("productsBox")),
-  );
-  getIt.registerLazySingleton<ProductsRepo>(
-    () => ProductsRepo(getIt(), getIt()),
-  );
+  getIt.registerLazySingleton<ProductsApiService>(() => ProductsApiService(dio));
+  getIt.registerLazySingleton<ProductsLocalDataSource>(() => ProductsLocalDataSource(Hive.box("productsBox")));
+  getIt.registerLazySingleton<ProductsRepo>(() => ProductsRepo(getIt(), getIt()));
   getIt.registerFactory<ProductsCubit>(() => ProductsCubit(getIt(), getIt()));
 
   // Fav
-  getIt.registerLazySingleton<FavProductsLocalDataSource>(
-    () => FavProductsLocalDataSource(Hive.box("favBox")),
-  );
+  getIt.registerLazySingleton<FavProductsLocalDataSource>(() => FavProductsLocalDataSource(Hive.box("favBox")));
   getIt.registerLazySingleton<FavProductsRepo>(() => FavProductsRepo(getIt()));
-  getIt.registerLazySingleton<FavProductsCubit>(
-    () => FavProductsCubit(getIt()),
-  );
-
-  // Internet
-  getIt.registerLazySingleton<InternetConnectionCubit>(
-    () => InternetConnectionCubit(),
-  );
+  getIt.registerLazySingleton<FavProductsCubit>(() => FavProductsCubit(getIt()));
 
   // Firebase Auth
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-  getIt.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSource(getIt()),
-  );
-  getIt.registerLazySingleton<UserLocalDataSource>(
-    () => UserLocalDataSource(Hive.box("userBox")),
-  );
+  getIt.registerLazySingleton<AuthRemoteDataSource>(() => AuthRemoteDataSource(getIt()));
+  getIt.registerLazySingleton<UserLocalDataSource>(() => UserLocalDataSource(Hive.box("userBox")));
   getIt.registerLazySingleton<AuthRepo>(() => AuthRepo(getIt(), getIt()));
   getIt.registerFactory<AuthCubit>(() => AuthCubit(getIt()));
 
   // Cart
-  getIt.registerLazySingleton<CartLocalDataSource>(
-    () => CartLocalDataSource(Hive.box("cartBox")),
-  );
+  getIt.registerLazySingleton<CartLocalDataSource>(() => CartLocalDataSource(Hive.box("cartBox")));
   getIt.registerLazySingleton<CartRepo>(() => CartRepo(getIt()));
   getIt.registerLazySingleton<CartCubit>(() => CartCubit(getIt()));
 
@@ -99,6 +85,7 @@ Future<void> setupGetIt() async {
   // Profile
   getIt.registerFactory<ProfileCubit>(() => ProfileCubit(getIt()));
 
-  // Settings
-  getIt.registerLazySingleton<SettingsCubit>(() => SettingsCubit());
+  // Push Notifications
+  getIt.registerSingleton<PushNotificationService>(PushNotificationService());
+  await getIt<PushNotificationService>().initialize();
 }

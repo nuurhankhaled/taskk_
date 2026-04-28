@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PriceRowWidget extends StatelessWidget {
-  const PriceRowWidget({
-    required this.label,
-    required this.value,
-    this.isBold = false,
-  });
+  const PriceRowWidget({required this.label, required this.value, this.isBold = false});
 
   final String label;
   final String value;
@@ -18,18 +14,11 @@ class PriceRowWidget extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            fontSize: isBold ? 16 : 14,
-          ),
+          style: TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.normal, fontSize: isBold ? 16 : 14),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-            fontSize: isBold ? 16 : 14,
-            color: isBold ? Colors.deepPurple : Colors.black,
-          ),
+          style: TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.normal, fontSize: isBold ? 16 : 14, color: isBold ? Colors.deepPurple : Colors.grey),
         ),
       ],
     );

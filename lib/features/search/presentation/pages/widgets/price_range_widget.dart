@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/features/search/presentation/cubit/search_cubit/search_cubit.dart';
@@ -16,24 +17,11 @@ class PriceRangeWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Price Range:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  '${cubit.priceRange.start.toInt()} - ${cubit.priceRange.end.toInt()} EGP',
-                  style: const TextStyle(color: Colors.deepPurple),
-                ),
+                Text('Price Range:'.tr(), style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('${cubit.priceRange.start.toInt()} - ${cubit.priceRange.end.toInt()} ${'EGP'.tr()}', style: const TextStyle(color: Colors.deepPurple)),
               ],
             ),
-            RangeSlider(
-              values: cubit.priceRange,
-              min: 0,
-              max: 1000,
-              divisions: 20,
-              activeColor: Colors.deepPurple,
-              onChanged: cubit.onPriceRangeChanged,
-            ),
+            RangeSlider(values: cubit.priceRange, min: 0, max: 1000, divisions: 20, activeColor: Colors.deepPurple, onChanged: cubit.onPriceRangeChanged),
           ],
         );
       },

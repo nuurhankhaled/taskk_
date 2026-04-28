@@ -21,4 +21,7 @@ class CartItemRemoved extends CartState {}
 
 class CartItemUpdated extends CartState {}
 
-class CartCleared extends CartState {}
+class CartCleared extends CartState {
+  final bool silent;
+  const CartCleared({this.silent = true});
+}

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/features/fav_products/presentation/cubit/fav_products_cubit/fav_products_cubit.dart';
@@ -16,9 +17,9 @@ class FavProdcuctsPage extends StatelessWidget {
             return (state is FavProductsLoading)
                 ? Center(child: CircularProgressIndicator())
                 : (state is FavProductsFailed)
-                ? Center(child: Text("Error"))
+                ? Center(child: Text("Error".tr()))
                 : (context.read<FavProductsCubit>().favProducts.isEmpty)
-                ? Center(child: Text("Empty"))
+                ? Center(child: Text("Empty".tr()))
                 : MediaQuery.removePadding(
                     context: context,
                     removeTop: true,
@@ -27,20 +28,11 @@ class FavProdcuctsPage extends StatelessWidget {
                         crossAxisCount: 2,
                         crossAxisSpacing: 5,
                         mainAxisSpacing: 5,
-                        childAspectRatio:
-                            MediaQuery.of(context).size.width /
-                            (MediaQuery.of(context).size.height * 0.65),
+                        childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height * 0.65),
                       ),
-                      itemCount: context
-                          .read<FavProductsCubit>()
-                          .favProducts
-                          .length,
+                      itemCount: context.read<FavProductsCubit>().favProducts.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return ProductWidget(
-                          product: context
-                              .read<FavProductsCubit>()
-                              .favProducts[index],
-                        );
+                        return ProductWidget(product: context.read<FavProductsCubit>().favProducts[index]);
                       },
                     ),
                   );

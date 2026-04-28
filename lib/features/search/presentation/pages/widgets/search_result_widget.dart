@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/features/home/presentation/pages/widgets/product_widget.dart';
@@ -17,17 +18,14 @@ class SearchResultsWidget extends StatelessWidget {
         }
 
         if (state is SearchInitial) {
-          return const Center(
+          return Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.search, size: 80, color: Colors.grey),
                   SizedBox(height: 16),
-                  Text(
-                    'Search for products',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
+                  Text('Search for products'.tr(), style: TextStyle(color: Colors.grey, fontSize: 16)),
                 ],
               ),
             ),
@@ -35,17 +33,14 @@ class SearchResultsWidget extends StatelessWidget {
         }
 
         if (state is SearchEmpty) {
-          return const Center(
+          return Center(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.search_off, size: 80, color: Colors.grey),
                   SizedBox(height: 16),
-                  Text(
-                    'No products found',
-                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
+                  Text('No products found'.tr(), style: TextStyle(color: Colors.grey, fontSize: 16)),
                 ],
               ),
             ),
@@ -65,9 +60,7 @@ class SearchResultsWidget extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 5,
                 mainAxisSpacing: 5,
-                childAspectRatio:
-                    MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height * 0.65),
+                childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height * 0.65),
               ),
               itemCount: state.results.length + (cubit.hasMore ? 1 : 0),
               itemBuilder: (context, index) {

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/helpers/extensions.dart';
@@ -21,17 +22,10 @@ class CheckoutWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Total:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  Text('Total:'.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   Text(
-                    '${cartCubit.totalPrice.toStringAsFixed(2)} EGP',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.deepPurple,
-                    ),
+                    '${cartCubit.totalPrice.toStringAsFixed(2)} ${"EGP".tr()}',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.deepPurple),
                   ),
                 ],
               ),
@@ -45,17 +39,11 @@ class CheckoutWidget extends StatelessWidget {
                 margin: const EdgeInsets.all(20),
                 width: double.infinity,
                 height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Center(
+                decoration: BoxDecoration(color: Colors.deepPurple, borderRadius: BorderRadius.circular(20)),
+                child: Center(
                   child: Text(
-                    "Checkout",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    "Checkout".tr(),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

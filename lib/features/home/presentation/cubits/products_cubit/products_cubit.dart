@@ -12,11 +12,9 @@ class ProductsCubit extends Cubit<ProductsState> {
   final ProductsRepo _productsRepo;
   final InternetConnectionCubit _internetCubit;
 
-  ProductsCubit(this._productsRepo, this._internetCubit)
-    : super(ProductsInitial());
+  ProductsCubit(this._productsRepo, this._internetCubit) : super(ProductsInitial());
 
-  static ProductsCubit get(BuildContext context) =>
-      BlocProvider.of<ProductsCubit>(context);
+  static ProductsCubit get(BuildContext context) => BlocProvider.of<ProductsCubit>(context);
 
   List<ProductModel> _allProducts = [];
   List<ProductModel> products = [];
@@ -133,10 +131,7 @@ class ProductsCubit extends Cubit<ProductsState> {
       return;
     }
 
-    final nextItems = _allProducts.sublist(
-      start,
-      end > _allProducts.length ? _allProducts.length : end,
-    );
+    final nextItems = _allProducts.sublist(start, end > _allProducts.length ? _allProducts.length : end);
 
     products.addAll(nextItems);
 
@@ -146,8 +141,7 @@ class ProductsCubit extends Cubit<ProductsState> {
   }
 
   void _onScroll() {
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 200) {
+    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
       loadMore();
     }
   }

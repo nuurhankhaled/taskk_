@@ -15,35 +15,26 @@ class MainLayoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MainLayoutCubit, MainLayoutState>(
       builder: (context, mainLayoutState) {
-        final currentIndex = mainLayoutState is AppBottomNavState
-            ? mainLayoutState.currentIndex
-            : 0;
+        final currentIndex = mainLayoutState is AppBottomNavState ? mainLayoutState.currentIndex : 0;
 
         return Scaffold(
           appBar: AppBar(
             title: Text(
               currentIndex == 0
-                  ? "Products"
+                  ? "Products".tr()
                   : currentIndex == 1
-                  ? "Favourites"
+                  ? "Favourites".tr()
                   : "settings".tr(),
             ),
             actions: [
-              if (currentIndex == 0)
-                IconButton(
-                  onPressed: () => context.pushNamed(Routes.searchPage),
-                  icon: const Icon(Icons.search),
-                ),
+              if (currentIndex == 0) IconButton(onPressed: () => context.pushNamed(Routes.searchPage), icon: const Icon(Icons.search)),
               IconButton(
                 onPressed: () {
                   context.pushNamed(Routes.cartPage);
                 },
                 icon: const Icon(Icons.shopping_cart_outlined),
               ),
-              IconButton(
-                onPressed: () => context.pushNamed(Routes.profilePage),
-                icon: const Icon(Icons.person_outline),
-              ),
+              IconButton(onPressed: () => context.pushNamed(Routes.profilePage), icon: const Icon(Icons.person_outline)),
             ],
           ),
           body: BlocBuilder<InternetConnectionCubit, InternetConnectionState>(
@@ -58,24 +49,15 @@ class MainLayoutPage extends StatelessWidget {
             },
             items: [
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  color: currentIndex == 0 ? Colors.purple : Colors.grey,
-                ),
+                icon: Icon(Icons.home, color: currentIndex == 0 ? Colors.purple : Colors.grey),
                 label: "",
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.favorite,
-                  color: currentIndex == 1 ? Colors.purple : Colors.grey,
-                ),
+                icon: Icon(Icons.favorite, color: currentIndex == 1 ? Colors.purple : Colors.grey),
                 label: "",
               ),
               BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.settings,
-                  color: currentIndex == 2 ? Colors.purple : Colors.grey,
-                ),
+                icon: Icon(Icons.settings, color: currentIndex == 2 ? Colors.purple : Colors.grey),
                 label: "",
               ),
             ],

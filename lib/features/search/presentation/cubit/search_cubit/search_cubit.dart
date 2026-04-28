@@ -28,48 +28,29 @@ class SearchCubit extends Cubit<SearchState> {
   Future<void> init() async {
     scrollController.addListener(_onScroll);
     final result = await _productsRepo.getCachedProducts();
-    result.when(
-      success: (data) => _allProducts = data,
-      failure: (_) => emit(SearchFailed('Failed to load products')),
-    );
+    result.when(success: (data) => _allProducts = data, failure: (_) => emit(SearchFailed('Failed to load products')));
   }
 
   void _onScroll() {
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 200) {
+    if (scrollController.position.pixels >= scrollController.position.maxScrollExtent - 200) {
       _loadNextPage();
     }
   }
 
   void onSearchChanged(String value) {
-    search(
-      value,
-      category: selectedCategory,
-      minPrice: priceRange.start.toInt(),
-      maxPrice: priceRange.end.toInt(),
-    );
+    search(value, category: selectedCategory, minPrice: priceRange.start.toInt(), maxPrice: priceRange.end.toInt());
   }
 
   void onCategorySelected(String? category) {
     selectedCategory = category;
     emit(SearchInitial());
-    search(
-      searchController.text,
-      category: selectedCategory,
-      minPrice: priceRange.start.toInt(),
-      maxPrice: priceRange.end.toInt(),
-    );
+    search(searchController.text, category: selectedCategory, minPrice: priceRange.start.toInt(), maxPrice: priceRange.end.toInt());
   }
 
   void onPriceRangeChanged(RangeValues values) {
     priceRange = values;
     emit(SearchInitial());
-    search(
-      searchController.text,
-      category: selectedCategory,
-      minPrice: values.start.toInt(),
-      maxPrice: values.end.toInt(),
-    );
+    search(searchController.text, category: selectedCategory, minPrice: values.start.toInt(), maxPrice: values.end.toInt());
   }
 
   void clearSearch() {
@@ -80,10 +61,7 @@ class SearchCubit extends Cubit<SearchState> {
   void search(String query, {String? category, int? minPrice, int? maxPrice}) {
     _debounceTimer?.cancel();
 
-    if (query.isEmpty &&
-        category == null &&
-        minPrice == null &&
-        maxPrice == null) {
+    if (query.isEmpty && category == null && minPrice == null && maxPrice == null) {
       emit(SearchInitial());
       return;
     }
@@ -91,35 +69,19 @@ class SearchCubit extends Cubit<SearchState> {
     emit(SearchLoading());
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      _performSearch(
-        query,
-        category: category,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-      );
+      _performSearch(query, category: category, minPrice: minPrice, maxPrice: maxPrice);
     });
   }
 
-  void _performSearch(
-    String query, {
-    String? category,
-    int? minPrice,
-    int? maxPrice,
-  }) {
+  void _performSearch(String query, {String? category, int? minPrice, int? maxPrice}) {
     List<ProductModel> results = _allProducts;
 
     if (query.isNotEmpty) {
-      results = results
-          .where((p) => p.title!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      results = results.where((p) => p.title!.toLowerCase().contains(query.toLowerCase())).toList();
     }
 
     if (category != null && category.isNotEmpty) {
-      results = results
-          .where(
-            (p) => p.category?.name?.toLowerCase() == category.toLowerCase(),
-          )
-          .toList();
+      results = results.where((p) => p.category?.name?.toLowerCase() == category.toLowerCase()).toList();
     }
 
     if (minPrice != null) {
@@ -153,10 +115,7 @@ class SearchCubit extends Cubit<SearchState> {
       return;
     }
 
-    final nextItems = _filteredProducts.sublist(
-      start,
-      end > _filteredProducts.length ? _filteredProducts.length : end,
-    );
+    final nextItems = _filteredProducts.sublist(start, end > _filteredProducts.length ? _filteredProducts.length : end);
 
     displayedProducts.addAll(nextItems);
     _currentPage++;
@@ -164,11 +123,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(SearchSuccess(displayedProducts));
   }
 
-  List<String> get categories => _allProducts
-      .map((p) => p.category?.name ?? '')
-      .where((name) => name.isNotEmpty)
-      .toSet()
-      .toList();
+  List<String> get categories => _allProducts.map((p) => p.category?.name ?? '').where((name) => name.isNotEmpty).toSet().toList();
 
   @override
   Future<void> close() {

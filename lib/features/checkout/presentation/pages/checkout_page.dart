@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/helpers/extensions.dart';
@@ -22,12 +23,9 @@ class CheckoutPage extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Checkout'),
+            title: Text('Checkout'.tr()),
             centerTitle: true,
-            leading: IconButton(
-              onPressed: () => context.pop(),
-              icon: const Icon(Icons.arrow_back_ios),
-            ),
+            leading: IconButton(onPressed: () => context.pop(), icon: const Icon(Icons.arrow_back_ios)),
           ),
           body: Column(
             children: [
@@ -37,13 +35,7 @@ class CheckoutPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Order Summary',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text('Order Summary'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                       16.0.height(),
                       ListView.separated(
                         shrinkWrap: true,
@@ -60,47 +52,27 @@ class CheckoutPage extends StatelessWidget {
 
                       Container(
                         padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        decoration: BoxDecoration(color: Theme.of(context).brightness == Brightness.dark ? Colors.grey.shade900 : Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
                         child: Column(
                           children: [
-                            PriceRowWidget(
-                              label: 'Subtotal',
-                              value: '${subtotal.toStringAsFixed(2)} EGP',
-                            ),
+                            PriceRowWidget(label: 'Subtotal'.tr(), value: '${subtotal.toStringAsFixed(2)} ${"EGP".tr()}'),
                             const SizedBox(height: 8),
-                            PriceRowWidget(
-                              label: 'Shipping',
-                              value: '$_shipping EGP',
-                            ),
+                            PriceRowWidget(label: 'Shipping'.tr(), value: '$_shipping ${"EGP".tr()}'),
                             const Divider(height: 24),
-                            PriceRowWidget(
-                              label: 'Total',
-                              value: '${total.toStringAsFixed(2)} EGP',
-                              isBold: true,
-                            ),
+                            PriceRowWidget(label: 'Total'.tr(), value: '${total.toStringAsFixed(2)} ${"EGP".tr()}', isBold: true),
                           ],
                         ),
                       ),
-
                       24.0.height(),
                       Container(
                         padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
+                        decoration: BoxDecoration(color: Theme.of(context).brightness == Brightness.dark ? Colors.grey.shade900 : Colors.grey.shade100, borderRadius: BorderRadius.circular(12)),
                         child: const Row(
                           children: [
                             Icon(Icons.location_on, color: Colors.deepPurple),
                             SizedBox(width: 8),
                             Expanded(
-                              child: Text(
-                                '123 Mock Street, Cairo, Egypt',
-                                style: TextStyle(fontSize: 14),
-                              ),
+                              child: Text('123 Mock Street, Cairo, Egypt', style: TextStyle(fontSize: 14, color: Colors.grey)),
                             ),
                           ],
                         ),
@@ -118,25 +90,14 @@ class CheckoutPage extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const MockPaymentScreen(),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const MockPaymentScreen()));
                     },
-                    child: const Text(
-                      'Proceed to Payment',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Text(
+                      'Proceed to Payment'.tr(),
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

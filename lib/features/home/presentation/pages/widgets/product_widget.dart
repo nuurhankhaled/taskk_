@@ -1,10 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/helpers/extensions.dart';
 import 'package:test_project/core/routing/routes.dart';
 import 'package:test_project/features/fav_products/presentation/cubit/fav_products_cubit/fav_products_cubit.dart';
 import 'package:test_project/features/home/data/models/product_model.dart';
-import 'package:test_project/features/product/presentation/pages/product_page.dart';
 
 class ProductWidget extends StatelessWidget {
   ProductWidget({super.key, required this.product});
@@ -22,7 +22,8 @@ class ProductWidget extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
+
               boxShadow: [BoxShadow(color: Colors.black12, spreadRadius: -2, blurRadius: 5)],
               borderRadius: BorderRadius.circular(10),
             ),
@@ -53,7 +54,7 @@ class ProductWidget extends StatelessWidget {
                             await context.read<FavProductsCubit>().writeData(product);
                           }
                         },
-                        icon: Icon(isFav ? Icons.favorite : Icons.favorite_outline, color: isFav ? Colors.red : Colors.black),
+                        icon: Icon(isFav ? Icons.favorite : Icons.favorite_outline, color: isFav ? Colors.red : Colors.grey),
                       ),
                     ),
                   ],
@@ -65,7 +66,7 @@ class ProductWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(maxLines: 2, overflow: TextOverflow.ellipsis, product.title!),
-                      Text(maxLines: 2, overflow: TextOverflow.ellipsis, "Price : ${product.price!.toString()} EGP"),
+                      Text(maxLines: 2, overflow: TextOverflow.ellipsis, "${"Price:".tr()} ${product.price!.toString()} ${"EGP".tr()}"),
                     ],
                   ),
                 ),

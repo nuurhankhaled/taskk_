@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/core/helpers/extensions.dart';
@@ -12,11 +13,11 @@ class AddToCartWidget extends StatelessWidget {
     return BlocConsumer<CartCubit, CartState>(
       listener: (context, state) {
         if (state is CartItemAdded) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Item added to cart '), backgroundColor: Colors.green, duration: Duration(seconds: 1)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Item added to cart'.tr()), backgroundColor: Colors.green, duration: Duration(seconds: 1)));
         } else if (state is CartItemUpdated) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Quantity updated'), backgroundColor: Colors.deepPurple, duration: Duration(seconds: 1)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Quantity updated'.tr()), backgroundColor: Colors.deepPurple, duration: Duration(seconds: 1)));
         } else if (state is CartItemRemoved) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Item removed from cart'), backgroundColor: Colors.red, duration: Duration(seconds: 1)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Item removed from cart'.tr()), backgroundColor: Colors.red, duration: Duration(seconds: 1)));
         }
       },
       builder: (context, state) {
@@ -43,7 +44,7 @@ class AddToCartWidget extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        isInCart ? 'Added to Cart' : 'Add to Cart',
+                        isInCart ? 'Added to Cart'.tr() : 'Add to Cart'.tr(),
                         style: TextStyle(color: isInCart ? Colors.deepPurple : Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),

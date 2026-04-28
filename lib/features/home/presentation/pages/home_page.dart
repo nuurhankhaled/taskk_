@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_project/features/home/presentation/cubits/products_cubit/products_cubit.dart';
@@ -22,31 +23,17 @@ class HomePage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    state.isNoInternet ? Icons.wifi_off : Icons.error_outline,
-                    size: 80,
-                    color: Colors.grey,
-                  ),
+                  Icon(state.isNoInternet ? Icons.wifi_off : Icons.error_outline, size: 80, color: Colors.grey),
                   const SizedBox(height: 16),
-                  Text(
-                    state.isNoInternet
-                        ? 'No internet connection'
-                        : 'Something went wrong',
-                    style: const TextStyle(color: Colors.grey, fontSize: 16),
-                  ),
+                  Text(state.isNoInternet ? 'No internet'.tr() : 'Something went wrong'.tr(), style: const TextStyle(color: Colors.grey, fontSize: 16)),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     ),
                     onPressed: () => cubit.loadProducts(),
-                    child: const Text(
-                      'Retry',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: Text('retry'.tr(), style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
@@ -58,7 +45,7 @@ class HomePage extends StatelessWidget {
           final isPaginating = state is PaginationLoading;
 
           if (products.isEmpty) {
-            return const Center(child: Text("Empty"));
+            return Center(child: Text("Empty".tr()));
           }
 
           return Padding(
@@ -75,16 +62,12 @@ class HomePage extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5,
-                    childAspectRatio:
-                        MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height * 0.65),
+                    childAspectRatio: MediaQuery.of(context).size.width / (MediaQuery.of(context).size.height * 0.65),
                   ),
                   itemCount: products.length + (hasMore ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == products.length) {
-                      return isPaginating
-                          ? const Center(child: CircularProgressIndicator())
-                          : const SizedBox.shrink();
+                      return isPaginating ? const Center(child: CircularProgressIndicator()) : const SizedBox.shrink();
                     }
                     return ProductWidget(product: products[index]);
                   },

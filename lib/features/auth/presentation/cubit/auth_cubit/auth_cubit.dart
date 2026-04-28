@@ -19,10 +19,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> login() async {
     emit(LoginLoading());
-    final result = await _authRepo.login(
-      emailController.text,
-      passwordController.text,
-    );
+    final result = await _authRepo.login(emailController.text, passwordController.text);
     result.when(
       success: (_) {
         emailController.clear();
@@ -35,18 +32,10 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> signup() async {
     emit(SignupLoading());
-    final result = await _authRepo.register(
-      emailController.text,
-      passwordController.text,
-    );
+    final result = await _authRepo.register(emailController.text, passwordController.text);
     result.when(
       success: (_) async {
-        final user = UserModel(
-          firstName: firstNameController.text,
-          lastName: lastNameController.text,
-          email: emailController.text,
-          mobile: mobileController.text,
-        );
+        final user = UserModel(firstName: firstNameController.text, lastName: lastNameController.text, email: emailController.text, mobile: mobileController.text);
         await _authRepo.saveUser(user);
 
         emailController.clear();
@@ -64,10 +53,7 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> logout() async {
     emit(LoginLoading());
     final result = await _authRepo.logout();
-    result.when(
-      success: (_) => emit(AuthInitial()),
-      failure: (error) => emit(LoginFailure(error)),
-    );
+    result.when(success: (_) => emit(AuthInitial()), failure: (error) => emit(LoginFailure(error)));
   }
 
   @override

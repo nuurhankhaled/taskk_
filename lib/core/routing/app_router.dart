@@ -28,31 +28,19 @@ class AppRouter {
     switch (settings.name) {
       case Routes.loginPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<AuthCubit>(),
-            child: LoginPage(),
-          ),
+          builder: (_) => BlocProvider(create: (context) => getIt<AuthCubit>(), child: LoginPage()),
         );
       case Routes.signupPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<AuthCubit>(),
-            child: SignupPage(),
-          ),
+          builder: (_) => BlocProvider(create: (context) => getIt<AuthCubit>(), child: SignupPage()),
         );
       case Routes.mainlayoutPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<MainLayoutCubit>(),
-            child: MainLayoutPage(),
-          ),
+          builder: (_) => BlocProvider.value(value: getIt<MainLayoutCubit>(), child: MainLayoutPage()),
         );
       case Routes.cartPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: getIt<CartCubit>()..loadCart(),
-            child: CartPage(),
-          ),
+          builder: (_) => BlocProvider.value(value: getIt<CartCubit>()..loadCart(), child: CartPage()),
         );
       case Routes.productPage:
         var args = settings.arguments as ProductModel;
@@ -67,17 +55,11 @@ class AppRouter {
         );
       case Routes.checkoutPage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: getIt<CartCubit>(),
-            child: CheckoutPage(),
-          ),
+          builder: (_) => BlocProvider.value(value: getIt<CartCubit>(), child: CheckoutPage()),
         );
       case Routes.profilePage:
         return CupertinoPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: getIt<ProfileCubit>()..init(),
-            child: ProfilePage(),
-          ),
+          builder: (_) => BlocProvider.value(value: getIt<ProfileCubit>()..init(), child: ProfilePage()),
         );
       case Routes.searchPage:
         return CupertinoPageRoute(
@@ -103,10 +85,7 @@ class AppRouter {
       ],
       child: HomePage(),
     ),
-    BlocProvider.value(
-      value: getIt<FavProductsCubit>()..getAllFavourites(),
-      child: FavProdcuctsPage(),
-    ),
+    BlocProvider.value(value: getIt<FavProductsCubit>()..getAllFavourites(), child: FavProdcuctsPage()),
     BlocProvider.value(value: getIt<SettingsCubit>(), child: SettingsPage()),
   ];
 }

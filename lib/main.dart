@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,9 +11,11 @@ import 'package:test_project/core/routing/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:test_project/features/settings/presentation/cubit/settings_cubit/settings_cubit.dart';
 import 'firebase_options.dart';
+import 'package:test_project/core/fcm.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   Bloc.observer = MyBlocObserver();
 
@@ -25,10 +28,7 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) =>
-              getIt<InternetConnectionCubit>()..checkConnectivity(),
-        ),
+        BlocProvider(create: (context) => getIt<InternetConnectionCubit>()..checkConnectivity()),
         BlocProvider(create: (context) => getIt<SettingsCubit>()),
       ],
       child: EasyLocalization(
@@ -58,15 +58,9 @@ class MyApp extends StatelessWidget {
           locale: context.locale,
           debugShowCheckedModeBanner: false,
           themeMode: settingsCubit.themeMode,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
+          theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple), useMaterial3: true),
           darkTheme: ThemeData.dark().copyWith(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple,
-              brightness: Brightness.dark,
-            ),
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
           ),
           onGenerateRoute: appRouter.generateRoute,
           initialRoute: Routes.signupPage,

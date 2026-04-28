@@ -1,14 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:test_project/core/helpers/extensions.dart';
 import 'package:test_project/features/cart/data/models/cart_model.dart';
 import 'package:test_project/features/cart/presentation/cubits/cart_cubit/cart_cubit.dart';
 
 class CartProductWidget extends StatelessWidget {
-  const CartProductWidget({
-    super.key,
-    required this.item,
-    required this.cartCubit,
-  });
+  const CartProductWidget({super.key, required this.item, required this.cartCubit});
 
   final CartModel item;
   final CartCubit cartCubit;
@@ -24,10 +21,9 @@ class CartProductWidget extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, spreadRadius: -2, blurRadius: 5),
-        ],
+        color: Theme.of(context).cardColor,
+
+        boxShadow: const [BoxShadow(color: Colors.black12, spreadRadius: -2, blurRadius: 5)],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,11 +38,7 @@ class CartProductWidget extends StatelessWidget {
                 item.product.images![0],
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Center(
-                  child: Icon(
-                    Icons.broken_image,
-                    size: imageSize * 0.4,
-                    color: Colors.grey,
-                  ),
+                  child: Icon(Icons.broken_image, size: imageSize * 0.4, color: Colors.grey),
                 ),
               ),
             ),
@@ -64,75 +56,47 @@ class CartProductWidget extends StatelessWidget {
                   item.product.title!,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.035,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: screenWidth * 0.035, fontWeight: FontWeight.bold),
                 ),
 
                 SizedBox(height: screenWidth * 0.02),
 
                 Text(
-                  '${item.product.price} EGP',
-                  style: TextStyle(
-                    color: Colors.deepPurple,
-                    fontWeight: FontWeight.bold,
-                    fontSize: screenWidth * 0.033,
-                  ),
+                  '${item.product.price} ${"EGP".tr()}',
+                  style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.bold, fontSize: screenWidth * 0.033),
                 ),
 
-                // quantity controls
                 Row(
                   children: [
                     IconButton(
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                       onPressed: () async {
-                        await cartCubit.decrementQuantity(
-                          item.product.id!,
-                          quantity,
-                        );
+                        await cartCubit.decrementQuantity(item.product.id!, quantity);
                       },
-                      icon: Icon(
-                        Icons.remove_circle_outline,
-                        color: Colors.deepPurple,
-                        size: screenWidth * 0.055,
-                      ),
+                      icon: Icon(Icons.remove_circle_outline, color: Colors.deepPurple, size: screenWidth * 0.055),
                     ),
                     SizedBox(width: screenWidth * 0.02),
                     Text(
                       '$quantity',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: screenWidth * 0.035,
-                      ),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.035),
                     ),
                     SizedBox(width: screenWidth * 0.02),
                     IconButton(
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                       onPressed: () async {
-                        await cartCubit.incrementQuantity(
-                          item.product.id!,
-                          quantity,
-                        );
+                        await cartCubit.incrementQuantity(item.product.id!, quantity);
                       },
-                      icon: Icon(
-                        Icons.add_circle_outline,
-                        color: Colors.deepPurple,
-                        size: screenWidth * 0.055,
-                      ),
+                      icon: Icon(Icons.add_circle_outline, color: Colors.deepPurple, size: screenWidth * 0.055),
                     ),
                   ],
                 ),
 
                 // subtotal
                 Text(
-                  'Subtotal: ${(item.product.price! * quantity)} EGP',
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.03,
-                    color: Colors.grey,
-                  ),
+                  '${"Subtotal".tr()} ${(item.product.price! * quantity)} ${"EGP".tr()}',
+                  style: TextStyle(fontSize: screenWidth * 0.03, color: Colors.grey),
                 ),
               ],
             ),
@@ -145,11 +109,7 @@ class CartProductWidget extends StatelessWidget {
             onPressed: () async {
               await cartCubit.removeFromCart(item.product.id!);
             },
-            icon: Icon(
-              Icons.delete_outline,
-              color: Colors.red,
-              size: screenWidth * 0.055,
-            ),
+            icon: Icon(Icons.delete_outline, color: Colors.red, size: screenWidth * 0.055),
           ),
         ],
       ),
